@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!DOCTYPE sqlMap PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN"
+"http://ibatis.apache.org/dtd/sql-map-2.dtd">
+
+<sqlMap >
+
+	<!-- create ticker table -->
+	<update id="createTable">
+		CREATE TABLE TICKER (
+			SYMBOL VARCHAR(40) NOT NULL,
+			SERIES VARCHAR(5) NOT NULL,
+			OPEN FLOAT NOT NULL,
+			HIGH FLOAT NOT NULL,
+			LOW FLOAT NOT NULL,
+			CLOSE FLOAT NOT NULL,
+			LAST FLOAT NOT NULL,
+			PREVCLOSE FLOAT NOT NULL,
+			TOTTRDQTY BIGINT,
+			TOTTRDVAL DOUBLE,
+			TIMESTAMP VARCHAR(20) NOT NULL,
+			TOTALTRADES VARCHAR(10),
+			ISIN VARCHAR(20) NOT NULL,
+			PRIMARY KEY (SYMBOL,SERIES,TIMESTAMP)
+			);
+	</update>
+	
+	<!-- create ticker filename table -->
+	<update id="createTable_File">
+		CREATE TABLE FILE (
+			NAME VARCHAR(30) NOT NULL,
+			PRIMARY KEY(NAME)
+			);
+	</update>
+	
+	<!-- check if the table exists -->
+	<select id="findTable" resultClass="String" parameterClass="String">
+		SELECT information_schema.TABLES.TABLE_NAME FROM
+    	information_schema.TABLES 
+		WHERE information_schema.TABLES.TABLE_NAME =#VALUE#
+	</select>
+	
+	<!-- return all ticker files -->
+	<select id="getFilenames" resultClass="String">
+		SELECT NAME FROM FILE
+	</select>
+	
+	<parameterMap class="String" id="stringArg">
+		<parameter property="name" jdbcType="varchar"/>
+	</parameterMap>
+	
+	<!-- Insert into table file  -->
+	<insert id="insertFile" parameterMap="stringArg">
+		INSERT INTO FILE(NAME) VALUES(?)
+	</insert>
+	
+	<parameterMap class="com.playground.model.Ticker" id="tickrMap">
+		<parameter property="symbol"/>
+		<parameter property="series"/>
+		<parameter property="open"/>
+		<parameter property="high"/>
+		<parameter property="low"/>
+		<parameter property="close"/>
+		<parameter property="last"/>
+		<parameter property="prevclose"/>
+		<parameter property="tottrdqty"/>
+		<parameter property="tottrdval"/>
+		<parameter property="timestamp"/>
+		<parameter property="totaltrades"/>
+		<parameter property="isin"/>	
+	</parameterMap> 
+	
+	<!-- insert into table ticker -->
+	<insert id="insertTicker" parameterMap="tickrMap">
+		INSERT INTO TICKER(SYMBOL,SERIES,OPEN,HIGH,LOW,CLOSE,LAST,PREVCLOSE,TOTTRDQTY,TOTTRDVAL,TIMESTAMP,TOTALTRADES,ISIN)
+		VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?) 
+	</insert>
+	
+</sqlMap>
