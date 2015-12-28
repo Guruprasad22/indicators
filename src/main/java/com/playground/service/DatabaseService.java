@@ -1,9 +1,7 @@
 package com.playground.service;
 
 import java.io.File;
-import java.io.FileInputStream;
 import java.io.IOException;
-import java.io.InputStream;
 import java.io.Reader;
 import java.sql.SQLException;
 import java.util.ArrayList;
@@ -15,6 +13,7 @@ import org.apache.log4j.Logger;
 import com.ibatis.common.resources.Resources;
 import com.ibatis.sqlmap.client.SqlMapClient;
 import com.ibatis.sqlmap.client.SqlMapClientBuilder;
+import com.playground.model.Indicator;
 import com.playground.model.Ticker;
 
 
@@ -136,5 +135,37 @@ public class DatabaseService {
 		long endTime  = System.currentTimeMillis();
 		log.info("Total time taken = " + (endTime- startTime)/1000 + " seconds");
 		log.debug("++++commitRecords");
+	}
+	
+	public void commitIndicator(List<Indicator> myList) throws SQLException {
+		
+		log.info("-----commitIndicator");
+		long startTime  = System.currentTimeMillis();
+		
+		sqlMap.startTransaction();
+		sqlMap.startBatch();
+		for(Indicator ind: myList) {
+			sqlMap.insert("insertIndicator",ind);
+		}
+		sqlMap.executeBatch();
+		sqlMap.commitTransaction();
+		long endTime = System.currentTimeMillis();
+		log.info("Total time taken to commit indicators : " + (endTime - startTime)/(1000*60) + " minutes.");
+		log.info("++++++commitIndicator");
+	}
+	
+	public List<Ticker> getAllTickers() throws SQLException {
+		// read all the tickers from database
+		List<Ticker> tickerList =  (List<Ticker>) sqlMap.queryForList("getTickers");
+				 
+		if(tickerList.isEmpty()) {
+			log.info("There are no tickers committed to database");
+		}else{
+			log.debug("The files committed to database are ");
+					 for(Ticker ticker : tickerList) {
+						 log.debug(ticker);
+					 }
+				 }
+		return tickerList;
 	}
 }

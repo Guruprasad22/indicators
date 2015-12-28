@@ -7,9 +7,11 @@ import java.util.List;
 
 import org.junit.Test;
 
+import com.playground.model.Indicator;
 import com.playground.model.Ticker;
 import com.playground.service.DatabaseService;
 import com.playground.service.FileReaderService;
+import com.playground.service.SimpleMovingAverage;
 /**
  * Unit test for simple App.
  */
@@ -61,5 +63,16 @@ public class IndicatorTest {
 		DatabaseService databaseService =  new DatabaseService();
 		databaseService.commitRecords();		
 	}
-	
+//	@Test
+	public void getTickers() throws Exception {
+		DatabaseService databaseService = new DatabaseService();
+		databaseService.getAllTickers();
+	}
+	@Test
+	public void getTickersMap() throws Exception {
+		SimpleMovingAverage simpleMovingAverage = new SimpleMovingAverage();
+		simpleMovingAverage.compileMapOfIndividualStocks();
+		List<Indicator> myList = simpleMovingAverage.calculateSma(7);
+		new DatabaseService().commitIndicator(myList);
+	}
 }
