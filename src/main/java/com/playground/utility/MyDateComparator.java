@@ -9,7 +9,6 @@ import com.playground.model.Ticker;
 
 public class MyDateComparator implements Comparator<Ticker> {
 
-	@Override
 	public int compare(Ticker o1, Ticker o2){
 		SimpleDateFormat simpleDateFormat = new SimpleDateFormat("dd-MMM-yyyy");
 		Date date = new Date();
