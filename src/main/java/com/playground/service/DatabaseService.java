@@ -138,7 +138,7 @@ public class DatabaseService {
 	}
 	
 	public void commitIndicator(List<Indicator> myList) throws SQLException {
-		
+		try {
 		log.info("-----commitIndicator");
 		long startTime  = System.currentTimeMillis();
 		
@@ -152,6 +152,9 @@ public class DatabaseService {
 		long endTime = System.currentTimeMillis();
 		log.info("Total time taken to commit indicators : " + (endTime - startTime)/(1000*60) + " minutes.");
 		log.info("++++++commitIndicator");
+		}catch(Exception e) {
+			log.debug(e);
+		}
 	}
 	
 	public List<Ticker> getAllTickers() throws SQLException {

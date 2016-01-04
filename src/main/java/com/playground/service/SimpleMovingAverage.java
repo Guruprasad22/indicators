@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.sql.SQLException;
 import java.text.ParseException;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.Iterator;
@@ -58,15 +59,21 @@ public class SimpleMovingAverage {
 			ArrayList<Ticker> tickerList = entry.getValue();
 			Collections.sort(tickerList,new MyDateComparator());
 			ArrayList<Float> sma = new ArrayList<Float>();
-			for(int i = 0; i< tickerList.size(); i++) {
-					 Indicator indicator = new Indicator(tickerList.get(i));
-				for(int j=i+1; j<tickerList.size();j++) {
-					if(MyDateDiff.doDataDiff(tickerList.get(j).getTimestamp(), tickerList.get(j).getTimestamp()) <= interval) {
+			//set the indicators before interval as having 0 sma
+			for(int i=0; i<interval-1; i++) {
+				Indicator indicator = new Indicator(tickerList.get(i));
+				indicator.setSma(0);
+				indicatorList.add(indicator);
+			}
+			int count = 0;
+			for(int i = interval-1; i< tickerList.size(); i++) {
+				Indicator indicator = new Indicator(tickerList.get(i));
+				for(int j=count++; j<i;j++) {
 						sma.add(tickerList.get(j).getClose());
 					}
-				}
 				if(sma.isEmpty()) {
-					indicator.setSma(0);
+					log.debug("sma list is empty how come??");
+//					indicator.setSma(0);
 				} else {
 					float ma = 0;
 					for(int k=0; k<sma.size(); k++) {

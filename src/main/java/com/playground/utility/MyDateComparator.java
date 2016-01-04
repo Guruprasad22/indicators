@@ -21,9 +21,9 @@ public class MyDateComparator implements Comparator<Ticker> {
 			e.printStackTrace();
 		}
 		if(date.compareTo(date1) < 0) {
-			return 11;
-		} else {
 			return -1;
+		} else {
+			return 1;
 		}
 	}
 }
