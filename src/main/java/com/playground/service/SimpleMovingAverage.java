@@ -4,7 +4,6 @@ import java.io.IOException;
 import java.sql.SQLException;
 import java.text.ParseException;
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.Iterator;
@@ -17,7 +16,6 @@ import org.apache.log4j.Logger;
 import com.playground.model.Indicator;
 import com.playground.model.Ticker;
 import com.playground.utility.MyDateComparator;
-import com.playground.utility.MyDateDiff;
 
 public class SimpleMovingAverage {
 	
@@ -60,7 +58,15 @@ public class SimpleMovingAverage {
 			Collections.sort(tickerList,new MyDateComparator());
 			ArrayList<Float> sma = new ArrayList<Float>();
 			//set the indicators before interval as having 0 sma
-			for(int i=0; i<interval-1; i++) {
+			int iterations = 0;
+			if(tickerList.size() >= interval ) {
+				iterations = interval-1;
+			} else {
+				iterations = tickerList.size()-1;
+			}
+				
+			for(int i=0;i<iterations; i++) {
+				log.debug("i is : " + i + " iterations is " + iterations);
 				Indicator indicator = new Indicator(tickerList.get(i));
 				indicator.setSma(0);
 				indicatorList.add(indicator);
@@ -94,6 +100,35 @@ public class SimpleMovingAverage {
 		}
 		return indicatorList;
 	}
+	
+	/**
+	 * calculate the 12 day and 26 day ema
+	 * @return
+	 */
+	
+	public List<Indicator> calculateEma(List<Indicator> indicatorList) {
+		
+		boolean calculate12 = false;
+		if( indicatorList.size() >= 12 ) {
+			calculate12 = true;
+		}
+		
+		if(calculate12 == false) {
+			for(Indicator i : indicatorList) {
+				i.setEma12(0);
+			}
+		} else {
+			float ema12 = 0;
+			float k = 2/13;
+			for(int i=12; i< indicatorList.size(); i++) {
+				ema12 = (indicatorList.get(i).getSma() * (1-k)) + ( indicatorList.get(i).getClose() * k);
+			} 
+		}
+		return indicatorList;
+	}
+	
+	
+	
 
 	public Map<String, ArrayList<Ticker>> getTickerMap() {
 		return tickerMap;

@@ -11,6 +11,8 @@ public class Indicator extends Ticker {
 	}
 
 	private float sma = 0;
+	private float ema12 = 0;
+	private float ema26 = 0;
 
 	public Indicator() {
 		super();
@@ -35,6 +37,22 @@ public class Indicator extends Ticker {
 				+ ", last=" + getLast() + ", prevclose=" + getPrevclose()
 				+ ", tottrdqty=" + getTottrdqty() + ", tottrdval=" + getTottrdval()
 				+ ", timestamp=" + getTimestamp() + ", totaltrades=" + getTotaltrades()
-				+ ", isin=" + getIsin() + ", Sma=" + sma + "]";
+				+ ", isin=" + getIsin() + ", Sma=" + sma + ", ema12=" + ema12 + ", ema26=" + ema26 +   "]";
+	}
+
+	public float getEma12() {
+		return ema12;
+	}
+
+	public void setEma12(float ema12) {
+		this.ema12 = ema12;
+	}
+
+	public float getEma26() {
+		return ema26;
+	}
+
+	public void setEma26(float ema26) {
+		this.ema26 = ema26;
 	}
 }
