@@ -57,7 +57,7 @@ public class IndicatorTest {
 		dbService.doValidation();
 	}
 	
-//	@Test
+	@Test
 	public void commitRecords() throws Exception {
 		
 		DatabaseService databaseService =  new DatabaseService();

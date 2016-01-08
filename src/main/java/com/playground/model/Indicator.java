@@ -20,13 +20,13 @@ public class Indicator extends Ticker {
 	}
 	
 	public Indicator(Ticker t) {
-		super(t.getSymbol(),t.getSeries(),t.getOpen(),t.getHigh(),t.getLow(),t.getClose(),t.getLast(),t.getPrevclose(),t.getTottrdqty(),(long) t.getTottrdval(),t.getTimestamp(),t.getIsin());
+		super(t.getSymbol(),t.getSeries(),t.getOpen(),t.getHigh(),t.getLow(),t.getClose(),t.getLast(),t.getPrevclose(),t.getTottrdqty(),(long) t.getTottrdval(),t.getTimestamp(),t.getTotaltrades(),t.getIsin());
 		sma = 0;
 	}
 
 	public Indicator(String symbol, String series, float open, float high, float low, float close, float last,
-			float prevclose, int tottrdqty, long tottrdval, String timestamp, String isin) {
-		super(symbol, series, open, high, low, close, last, prevclose, tottrdqty, tottrdval, timestamp, isin);
+			float prevclose, int tottrdqty, long tottrdval, String timestamp, String totalTrades,String isin) {
+		super(symbol, series, open, high, low, close, last, prevclose, tottrdqty, tottrdval, timestamp, totalTrades,isin);
 		// TODO Auto-generated constructor stub
 	}
 

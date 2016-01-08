@@ -55,10 +55,10 @@ public class SimpleMovingAverage {
 			Map.Entry<String, ArrayList<Ticker>> entry = entries.next();
 			log.debug("Key is " + entry.getKey());
 			ArrayList<Ticker> tickerList = entry.getValue();
-			Collections.sort(tickerList,new MyDateComparator());
+			Collections.sort(tickerList,new MyDateComparator()); // sorts records in ascending order of dates
 			ArrayList<Float> sma = new ArrayList<Float>();
 			//set the indicators before interval as having 0 sma
-			int iterations = 0;
+			int iterations = 0; 
 			if(tickerList.size() >= interval ) {
 				iterations = interval-1;
 			} else {
@@ -76,7 +76,7 @@ public class SimpleMovingAverage {
 				Indicator indicator = new Indicator(tickerList.get(i));
 				for(int j=count++; j<i;j++) {
 						sma.add(tickerList.get(j).getClose());
-					}
+				}
 				if(sma.isEmpty()) {
 					log.debug("sma list is empty how come??");
 //					indicator.setSma(0);
@@ -94,7 +94,7 @@ public class SimpleMovingAverage {
 				indicatorList.add(indicator);
 				sma.clear();
 			}
- 		}
+ 		} // for each key
 		for(int l=0; l<indicatorList.size(); l++) {
 			log.info(indicatorList.get(l));
 		}

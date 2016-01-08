@@ -8,6 +8,8 @@ package com.playground.model;
  */
 
 public class Ticker {
+
+
 	private String symbol;
 	private String series;
 	private float open;
@@ -22,9 +24,8 @@ public class Ticker {
 	private String totaltrades;
 	private String isin;
 	
-	public Ticker(String symbol, String series, float open, float high,
-			float low, float close, float last, float prevclose, int tottrdqty,
-			long tottrdval, String timestamp, String isin) {
+	public Ticker(String symbol, String series, float open, float high, float low, float close, float last,
+			float prevclose, int tottrdqty, float tottrdval, String timestamp, String totaltrades, String isin) {
 		super();
 		this.symbol = symbol;
 		this.series = series;
@@ -37,6 +38,7 @@ public class Ticker {
 		this.tottrdqty = tottrdqty;
 		this.tottrdval = tottrdval;
 		this.timestamp = timestamp;
+		this.totaltrades = totaltrades;
 		this.isin = isin;
 	}
 	
