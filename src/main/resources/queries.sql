@@ -17,3 +17,6 @@ truncate table market.indicator;
 truncate table market.ticker;
 truncate table market.file;
 
+select symbol,series,count(*) from market.indicator group by symbol,series;
+
+

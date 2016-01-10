@@ -3,15 +3,21 @@ package com.playground.testsuite;
 import java.io.File;
 import java.io.IOException;
 import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
+import java.util.Map.Entry;
 
 import org.junit.Test;
 
 import com.playground.model.Indicator;
 import com.playground.model.Ticker;
 import com.playground.service.DatabaseService;
+import com.playground.service.Ema;
 import com.playground.service.FileReaderService;
 import com.playground.service.SimpleMovingAverage;
+import com.playground.utility.MapUtil;
 /**
  * Unit test for simple App.
  */
@@ -57,7 +63,7 @@ public class IndicatorTest {
 		dbService.doValidation();
 	}
 	
-	@Test
+//	@Test
 	public void commitRecords() throws Exception {
 		
 		DatabaseService databaseService =  new DatabaseService();
@@ -72,7 +78,13 @@ public class IndicatorTest {
 	public void getTickersMap() throws Exception {
 		SimpleMovingAverage simpleMovingAverage = new SimpleMovingAverage();
 		simpleMovingAverage.compileMapOfIndividualStocks();
-		List<Indicator> myList = simpleMovingAverage.calculateSma(7);
-		new DatabaseService().commitIndicator(myList);
+		Map<String,ArrayList<Indicator>> myMap = simpleMovingAverage.calculateSma(12);
+		MapUtil.printMap(myMap);
+		Ema ema = new Ema();
+		ema.setIndicatorMap(myMap);
+		myMap = ema.doEma();
+		ArrayList<Indicator> list = MapUtil.compileList(myMap);
+//		MapUtil.printMap(myMap);
+		new DatabaseService().commitIndicator(list);
 	}
 }

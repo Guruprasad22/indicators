@@ -15,12 +15,14 @@ import org.apache.log4j.Logger;
 
 import com.playground.model.Indicator;
 import com.playground.model.Ticker;
-import com.playground.utility.MyDateComparator;
+import com.playground.utility.MyTickerComparator;
 
 public class SimpleMovingAverage {
 	
 	private static Logger log = Logger.getLogger(SimpleMovingAverage.class);
-	Map<String,ArrayList<Ticker>> tickerMap = new HashMap<String,ArrayList<Ticker>>();
+	Map<String,ArrayList<Ticker>> tickerMap;// = new HashMap<String,ArrayList<Ticker>>();
+	Map<String,ArrayList<Indicator>> indicatorMap;// = new HashMap<String,ArrayList<Indicator>>();
+	
 	
 	// break the entire list into group of stock+series and populate to a map
 	public void compileMapOfIndividualStocks() throws SQLException, IOException {
@@ -48,17 +50,21 @@ public class SimpleMovingAverage {
 	 * @param interval
 	 * @throws ParseException 
 	 */
-	public List<Indicator> calculateSma(int interval) throws ParseException {
-		List<Indicator> indicatorList = new ArrayList<Indicator>();
+	public Map<String, ArrayList<Indicator>> calculateSma(int interval) throws ParseException {
+		
 		Iterator<Entry<String, ArrayList<Ticker>>> entries = tickerMap.entrySet().iterator();
-		while(entries.hasNext()) {
+		
+		while(entries.hasNext()) { // for each ticker
+			
 			Map.Entry<String, ArrayList<Ticker>> entry = entries.next();
 			log.debug("Key is " + entry.getKey());
 			ArrayList<Ticker> tickerList = entry.getValue();
-			Collections.sort(tickerList,new MyDateComparator()); // sorts records in ascending order of dates
+			Collections.sort(tickerList,new MyTickerComparator()); // sorts records in ascending order of dates
 			ArrayList<Float> sma = new ArrayList<Float>();
+			
 			//set the indicators before interval as having 0 sma
 			int iterations = 0; 
+			
 			if(tickerList.size() >= interval ) {
 				iterations = interval-1;
 			} else {
@@ -69,9 +75,11 @@ public class SimpleMovingAverage {
 				log.debug("i is : " + i + " iterations is " + iterations);
 				Indicator indicator = new Indicator(tickerList.get(i));
 				indicator.setSma(0);
-				indicatorList.add(indicator);
+				updateIndicatorMap(indicator.getSymbol()+ "+" + indicator.getSeries(),indicator);
 			}
+			
 			int count = 0;
+			
 			for(int i = interval-1; i< tickerList.size(); i++) {
 				Indicator indicator = new Indicator(tickerList.get(i));
 				for(int j=count++; j<i;j++) {
@@ -91,45 +99,15 @@ public class SimpleMovingAverage {
 						indicator.setSma(ma/sma.size());
 					}
 				}
-				indicatorList.add(indicator);
+				updateIndicatorMap(indicator.getSymbol()+ "+" + indicator.getSeries(),indicator);
 				sma.clear();
 			}
- 		} // for each key
-		for(int l=0; l<indicatorList.size(); l++) {
-			log.info(indicatorList.get(l));
-		}
-		return indicatorList;
-	}
-	
-	/**
-	 * calculate the 12 day and 26 day ema
-	 * @return
-	 */
-	
-	public List<Indicator> calculateEma(List<Indicator> indicatorList) {
-		
-		boolean calculate12 = false;
-		if( indicatorList.size() >= 12 ) {
-			calculate12 = true;
-		}
-		
-		if(calculate12 == false) {
-			for(Indicator i : indicatorList) {
-				i.setEma12(0);
-			}
-		} else {
-			float ema12 = 0;
-			float k = 2/13;
-			for(int i=12; i< indicatorList.size(); i++) {
-				ema12 = (indicatorList.get(i).getSma() * (1-k)) + ( indicatorList.get(i).getClose() * k);
-			} 
-		}
-		return indicatorList;
-	}
-	
-	
-	
 
+ 		} // end for each ticker
+
+		return indicatorMap;
+	}
+	
 	public Map<String, ArrayList<Ticker>> getTickerMap() {
 		return tickerMap;
 	}
@@ -138,12 +116,36 @@ public class SimpleMovingAverage {
 		this.tickerMap = tickerMap;
 	}
 
-	public SimpleMovingAverage(Map<String, ArrayList<Ticker>> tickerMap) {
+	public SimpleMovingAverage(Map<String, ArrayList<Ticker>> tickerMap,
+			Map<String, ArrayList<Indicator>> indicatorMap) {
 		super();
 		this.tickerMap = tickerMap;
+		this.indicatorMap = indicatorMap;
 	}
 
 	public SimpleMovingAverage() {
 		super();
+		tickerMap = new HashMap<String,ArrayList<Ticker>>();
+		indicatorMap = new HashMap<String,ArrayList<Indicator>>();
+		// TODO Auto-generated constructor stub
 	}
+
+	public Map<String, ArrayList<Indicator>> getIndicatorMap() {
+		return indicatorMap;
+	}
+
+	public void setIndicatorMap(Map<String, ArrayList<Indicator>> indicatorMap) {
+		this.indicatorMap = indicatorMap;
+	}
+
+	public void updateIndicatorMap(String key,Indicator i) {
+		if(indicatorMap.containsKey(key)) {
+			indicatorMap.get(key).add(i);
+		}else {
+			ArrayList<Indicator> tList = new ArrayList<Indicator>();
+			tList.add(i);
+			indicatorMap.put(key,tList);
+		}
+	}
+
 }
