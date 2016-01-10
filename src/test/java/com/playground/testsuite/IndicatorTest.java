@@ -4,17 +4,16 @@ import java.io.File;
 import java.io.IOException;
 import java.sql.SQLException;
 import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
-import java.util.Map.Entry;
 
 import org.junit.Test;
 
 import com.playground.model.Indicator;
 import com.playground.model.Ticker;
 import com.playground.service.DatabaseService;
-import com.playground.service.Ema;
+import com.playground.service.Ema12;
+import com.playground.service.Ema26;
 import com.playground.service.FileReaderService;
 import com.playground.service.SimpleMovingAverage;
 import com.playground.utility.MapUtil;
@@ -80,9 +79,12 @@ public class IndicatorTest {
 		simpleMovingAverage.compileMapOfIndividualStocks();
 		Map<String,ArrayList<Indicator>> myMap = simpleMovingAverage.calculateSma(12);
 		MapUtil.printMap(myMap);
-		Ema ema = new Ema();
+		Ema12 ema = new Ema12();
 		ema.setIndicatorMap(myMap);
 		myMap = ema.doEma();
+		Ema26 ema26 = new Ema26();
+		ema26.setIndicatorMap(myMap);
+		myMap = ema26.doEma();
 		ArrayList<Indicator> list = MapUtil.compileList(myMap);
 //		MapUtil.printMap(myMap);
 		new DatabaseService().commitIndicator(list);

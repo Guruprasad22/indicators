@@ -13,12 +13,12 @@ import com.playground.model.Indicator;
 import com.playground.model.Ticker;
 import com.playground.utility.MyTickerComparator;
 
-public class Ema {
+public class Ema12 {
 
-	private Map<String,ArrayList<Indicator>> indicatorMap;// = new HashMap<String,ArrayList<Indicator>>();
-	private Map<String,ArrayList<Indicator>> finalIndicatorMap;// = new HashMap<String,ArrayList<Indicator>>();
+	private Map<String,ArrayList<Indicator>> indicatorMap;
+	private Map<String,ArrayList<Indicator>> finalIndicatorMap;
 	
-	private static Logger log = Logger.getLogger(Ema.class);
+	private static Logger log = Logger.getLogger(Ema12.class);
 	
 	public Map<String,ArrayList<Indicator>> doEma() {
 		
@@ -35,7 +35,7 @@ public class Ema {
 			//set the first 11 emas to ZERO for ema12
 			if(indicatorList.size() >= 12) {
 				for(int i=0; i < 12; i++) {
-					Indicator indicator = new Indicator(indicatorList.get(i));
+					Indicator indicator = indicatorList.get(i);
 					indicator.setEma12(0);
 					updateIndicatorMap(indicator.getSymbol()+ "+" + indicator.getSeries(),indicator);
 				}
@@ -53,27 +53,6 @@ public class Ema {
 					updateIndicatorMap(indicator.getSymbol()+ "+" + indicator.getSeries(),indicator);
 				}				
 			}
-			
-/*			if(indicatorList.size() >= 26) {
-				//set the first 25 emas to ZERO for ema26
-				for(int i=0; i < 26; i++) {
-					Indicator indicator = new Indicator(indicatorList.get(i));
-					indicator.setEma26(0);
-				}
-
-				// calculate the 26 day ema
-				for(int i = 26; i < indicatorList.size(); i++) {
-					Indicator indicator = new Indicator(indicatorList.get(i));
-					float k = 2/27;
-					float ema26 = 0;
-					if( i == 26)
-						ema26 = (indicator.getClose() * k) + (indicator.getSma() * (1-k)); // need sma for 26 days 
-					else 
-						ema26 = (indicator.getClose() * k) + (indicatorList.get(i-1).getEma26() *(1-k));
-					indicator.setEma26(ema26);
-				}				
-			}*/
-			
 		}// end for each ticker
 		log.debug("----- doEma -----");
 		return finalIndicatorMap;
@@ -88,14 +67,14 @@ public class Ema {
 		this.indicatorMap = indicatorMap;
 	}
 
-	public Ema() {
+	public Ema12() {
 		super();
 		indicatorMap = new HashMap<String,ArrayList<Indicator>>();
 		finalIndicatorMap = new HashMap<String,ArrayList<Indicator>>();
 		// TODO Auto-generated constructor stub
 	}
 
-	public Ema(Map<String, ArrayList<Indicator>> indicatorMap, Map<String, ArrayList<Indicator>> finalindicatorMap) {
+	public Ema12(Map<String, ArrayList<Indicator>> indicatorMap, Map<String, ArrayList<Indicator>> finalindicatorMap) {
 		super();
 		this.indicatorMap = indicatorMap;
 		this.finalIndicatorMap = finalindicatorMap;
