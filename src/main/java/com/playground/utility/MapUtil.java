@@ -19,10 +19,10 @@ public class MapUtil {
 		Iterator<Entry<String,ArrayList<Indicator>>> iterator = myMap.entrySet().iterator();
 		while(iterator.hasNext()) {
 			Map.Entry<String, ArrayList<Indicator>> entry = iterator.next();
-			log.debug("Key is " + entry.getKey());
+			log.info("Key is " + entry.getKey());
 			ArrayList<Indicator> myList = entry.getValue();
 			for(Object obj : myList) {
-					log.debug(obj );
+					log.info(obj );
 			}
 		}
 	}
@@ -35,6 +35,7 @@ public class MapUtil {
 			Map.Entry<String, ArrayList<Indicator>> entry = iterator.next();
 			myList.addAll(entry.getValue());
 		}
+		log.info("converted map into a list of size : " + myList.size());
 		return myList;
 	}
 }

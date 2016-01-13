@@ -15,6 +15,7 @@ import com.playground.service.DatabaseService;
 import com.playground.service.Ema12;
 import com.playground.service.Ema26;
 import com.playground.service.FileReaderService;
+import com.playground.service.Macd;
 import com.playground.service.SimpleMovingAverage;
 import com.playground.utility.MapUtil;
 /**
@@ -73,18 +74,22 @@ public class IndicatorTest {
 		DatabaseService databaseService = new DatabaseService();
 		databaseService.getAllTickers();
 	}
+	
 	@Test
-	public void getTickersMap() throws Exception {
+	public void calculateIndicators() throws Exception {
 		SimpleMovingAverage simpleMovingAverage = new SimpleMovingAverage();
 		simpleMovingAverage.compileMapOfIndividualStocks();
 		Map<String,ArrayList<Indicator>> myMap = simpleMovingAverage.calculateSma(12);
-		MapUtil.printMap(myMap);
+//		MapUtil.printMap(myMap);
 		Ema12 ema = new Ema12();
 		ema.setIndicatorMap(myMap);
 		myMap = ema.doEma();
 		Ema26 ema26 = new Ema26();
 		ema26.setIndicatorMap(myMap);
 		myMap = ema26.doEma();
+		Macd macd = new Macd();
+		macd.setIndicatorMap(myMap);
+		myMap = macd.doMacd();
 		ArrayList<Indicator> list = MapUtil.compileList(myMap);
 //		MapUtil.printMap(myMap);
 		new DatabaseService().commitIndicator(list);

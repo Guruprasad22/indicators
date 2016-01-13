@@ -44,6 +44,8 @@
 			SMA FLOAT NOT NULL,
 			EMA12 FLOAT,
 			EMA26 FLOAT,
+			FASTMACD FLOAT,
+			SLOWMACD FLOAT,
 			PRIMARY KEY (SYMBOL,SERIES,TIMESTAMP)
 		)
 	</update>
@@ -115,7 +117,9 @@
 		<parameter property="isin"/>
 		<parameter property="sma"/>	
 		<parameter property="ema12"/>
-		<parameter property="ema26"/>	
+		<parameter property="ema26"/>
+		<parameter property="fastMacd"/>
+		<parameter property="slowMacd"/>	
 	</parameterMap>
 	
 	<!-- insert into table ticker -->
@@ -126,8 +130,8 @@
 	
 	<!-- insert into table indicator -->
 	<insert id="insertIndicator" parameterMap="indicatorMap">
-		INSERT INTO INDICATOR(SYMBOL,SERIES,OPEN,HIGH,LOW,CLOSE,LAST,PREVCLOSE,TOTTRDQTY,TOTTRDVAL,TIMESTAMP,TOTALTRADES,ISIN,SMA,EMA12,EMA26)
-		VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?) 
+		INSERT INTO INDICATOR(SYMBOL,SERIES,OPEN,HIGH,LOW,CLOSE,LAST,PREVCLOSE,TOTTRDQTY,TOTTRDVAL,TIMESTAMP,TOTALTRADES,ISIN,SMA,EMA12,EMA26,FASTMACD,SLOWMACD)
+		VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?) 
 	</insert>
 	
 </sqlMap>

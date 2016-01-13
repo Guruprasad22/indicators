@@ -72,7 +72,7 @@ public class SimpleMovingAverage {
 			}
 				
 			for(int i=0;i<iterations; i++) {
-				log.debug("i is : " + i + " iterations is " + iterations);
+//				log.debug("i is : " + i + " iterations is " + iterations);
 				Indicator indicator = new Indicator(tickerList.get(i));
 				indicator.setSma(0);
 				updateIndicatorMap(indicator.getSymbol()+ "+" + indicator.getSeries(),indicator);
@@ -147,5 +147,4 @@ public class SimpleMovingAverage {
 			indicatorMap.put(key,tList);
 		}
 	}
-
 }

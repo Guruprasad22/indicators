@@ -75,9 +75,9 @@ public class DatabaseService {
 			 log.info("There are no files committed to database");
 		 }
 		 else {
-			 log.info("The files committed to database are ");
+			 log.debug("The files committed to database are ");
 			 for(String fileName : tickerFiles) {
-				 log.info(fileName);
+				 log.debug(fileName);
 			 }
 		 }
 		 
@@ -139,7 +139,7 @@ public class DatabaseService {
 	
 	public void commitIndicator(List<Indicator> myList) throws SQLException {
 		try {
-		log.info("-----commitIndicator");
+		log.debug("-----commitIndicator");
 		long startTime  = System.currentTimeMillis();
 		
 		sqlMap.startTransaction();
@@ -150,8 +150,8 @@ public class DatabaseService {
 		sqlMap.executeBatch();
 		sqlMap.commitTransaction();
 		long endTime = System.currentTimeMillis();
-		log.info("Total time taken to commit indicators : " + (endTime - startTime)/(1000*60) + " minutes.");
-		log.info("++++++commitIndicator");
+		log.debug("Total time taken to commit indicators : " + (endTime - startTime)/(1000*60) + " minutes.");
+		log.debug("++++++commitIndicator");
 		}catch(Exception e) {
 			log.debug(e);
 		}
@@ -166,7 +166,7 @@ public class DatabaseService {
 		}else{
 			log.debug("The files committed to database are ");
 					 for(Ticker ticker : tickerList) {
-						 log.debug(ticker);
+//						 log.debug(ticker);
 					 }
 				 }
 		return tickerList;

@@ -33,18 +33,18 @@ public class Ema26 {
 				
 				if(indicatorList.size() >= 26) {
 					//set the first 25 emas to ZERO for ema26
-					for(int i=0; i < 26; i++) {
+					for(int i=0; i < 25; i++) {
 						Indicator indicator = indicatorList.get(i);
 						indicator.setEma26(0);
 						updateIndicatorMap(indicator.getSymbol()+ "+" + indicator.getSeries(),indicator);
 					}
 
 					// calculate the 26 day ema
-					for(int i = 26; i < indicatorList.size(); i++) {
+					for(int i = 25; i < indicatorList.size(); i++) {
 						Indicator indicator = indicatorList.get(i);
 						float k = (float) 2/27;
 						float ema26 = 0;
-						if( i == 26)
+						if( i == 25)
 							ema26 = (indicator.getClose() * k) + (indicator.getSma() * (1-k));
 						else 
 							ema26 = (indicator.getClose() * k) + (indicatorList.get(i-1).getEma26() *(1-k));

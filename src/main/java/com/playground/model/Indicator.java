@@ -13,6 +13,8 @@ public class Indicator extends Ticker {
 	private float sma = 0;
 	private float ema12 = 0;
 	private float ema26 = 0;
+	private float fastMacd = 0;
+	private float slowMacd = 0;
 
 	public Indicator() {
 		super();
@@ -22,6 +24,10 @@ public class Indicator extends Ticker {
 	public Indicator(Ticker t) {
 		super(t.getSymbol(),t.getSeries(),t.getOpen(),t.getHigh(),t.getLow(),t.getClose(),t.getLast(),t.getPrevclose(),t.getTottrdqty(),(long) t.getTottrdval(),t.getTimestamp(),t.getTotaltrades(),t.getIsin());
 		sma = 0;
+		ema12 = 0;
+		ema26 = 0;
+		fastMacd = 0;
+		slowMacd = 0;
 	}
 
 	public Indicator(String symbol, String series, float open, float high, float low, float close, float last,
@@ -37,7 +43,7 @@ public class Indicator extends Ticker {
 				+ ", last=" + getLast() + ", prevclose=" + getPrevclose()
 				+ ", tottrdqty=" + getTottrdqty() + ", tottrdval=" + getTottrdval()
 				+ ", timestamp=" + getTimestamp() + ", totaltrades=" + getTotaltrades()
-				+ ", isin=" + getIsin() + ", Sma=" + sma + ", ema12=" + ema12 + ", ema26=" + ema26 +   "]";
+				+ ", isin=" + getIsin() + ", Sma=" + sma + ", ema12=" + ema12 + ", ema26=" + ema26 + ", fastMacd=" + fastMacd +", slowMac="+ slowMacd + "]";
 	}
 
 	public float getEma12() {
@@ -54,5 +60,21 @@ public class Indicator extends Ticker {
 
 	public void setEma26(float ema26) {
 		this.ema26 = ema26;
+	}
+
+	public float getFastMacd() {
+		return fastMacd;
+	}
+
+	public void setFastMacd(float fastMacd) {
+		this.fastMacd = fastMacd;
+	}
+
+	public float getSlowMacd() {
+		return slowMacd;
+	}
+
+	public void setSlowMacd(float slowMacd) {
+		this.slowMacd = slowMacd;
 	}
 }
