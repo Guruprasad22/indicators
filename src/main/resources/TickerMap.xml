@@ -46,6 +46,7 @@
 			EMA26 FLOAT,
 			FASTMACD FLOAT,
 			SLOWMACD FLOAT,
+			HISTOGRAM FLOAT,
 			PRIMARY KEY (SYMBOL,SERIES,TIMESTAMP)
 		)
 	</update>
@@ -119,7 +120,8 @@
 		<parameter property="ema12"/>
 		<parameter property="ema26"/>
 		<parameter property="fastMacd"/>
-		<parameter property="slowMacd"/>	
+		<parameter property="slowMacd"/>
+		<parameter property="histogram"/>	
 	</parameterMap>
 	
 	<!-- insert into table ticker -->
@@ -130,8 +132,8 @@
 	
 	<!-- insert into table indicator -->
 	<insert id="insertIndicator" parameterMap="indicatorMap">
-		INSERT INTO INDICATOR(SYMBOL,SERIES,OPEN,HIGH,LOW,CLOSE,LAST,PREVCLOSE,TOTTRDQTY,TOTTRDVAL,TIMESTAMP,TOTALTRADES,ISIN,SMA,EMA12,EMA26,FASTMACD,SLOWMACD)
-		VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?) 
+		INSERT INTO INDICATOR(SYMBOL,SERIES,OPEN,HIGH,LOW,CLOSE,LAST,PREVCLOSE,TOTTRDQTY,TOTTRDVAL,TIMESTAMP,TOTALTRADES,ISIN,SMA,EMA12,EMA26,FASTMACD,SLOWMACD,HISTOGRAM)
+		VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?) 
 	</insert>
 	
 </sqlMap>
