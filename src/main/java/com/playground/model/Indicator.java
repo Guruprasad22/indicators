@@ -16,6 +16,12 @@ public class Indicator extends Ticker {
 	private float fastMacd = 0;
 	private float slowMacd = 0;
 	private float histogram = 0;
+	
+	private float dirMvmtUp;
+	private float dirMvmtDown;
+	private float trueRange;
+	private float plusDI;
+	private float minusDI;
 
 	public Indicator() {
 		super();
@@ -30,6 +36,11 @@ public class Indicator extends Ticker {
 		fastMacd = 0;
 		slowMacd = 0;
 		histogram =0;
+		dirMvmtUp = 0;
+		dirMvmtDown = 0;
+		trueRange = 0;
+		plusDI = 0;
+		minusDI = 0;
 	}
 
 	public Indicator(String symbol, String series, float open, float high, float low, float close, float last,
@@ -38,7 +49,7 @@ public class Indicator extends Ticker {
 		// TODO Auto-generated constructor stub
 	}
 
-	@Override
+/*	@Override
 	public String toString() {
 		return "Ticker [symbol=" + getSymbol() + ", series=" + getSeries() + ", open="
 				+ getOpen() + ", high=" + getHigh() + ", low=" + getLow() + ", close=" + getClose()
@@ -47,7 +58,7 @@ public class Indicator extends Ticker {
 				+ ", timestamp=" + getTimestamp() + ", totaltrades=" + getTotaltrades()
 				+ ", isin=" + getIsin() + ", Sma=" + sma + ", ema12=" + ema12 + ", ema26=" + ema26 + ", fastMacd=" + fastMacd +", slowMac="+ slowMacd + ", histogram=" + histogram + "]";
 	}
-
+*/
 	public float getEma12() {
 		return ema12;
 	}
@@ -86,5 +97,57 @@ public class Indicator extends Ticker {
 
 	public void setHistogram(float histogram) {
 		this.histogram = histogram;
+	}
+
+	public float getTrueRange() {
+		return trueRange;
+	}
+
+	public void setTrueRange(float trueRange) {
+		this.trueRange = trueRange;
+	}
+
+	public float getPlusDI() {
+		return plusDI;
+	}
+
+	public void setPlusDI(float plusDI) {
+		this.plusDI = plusDI;
+	}
+
+	public float getMinusDI() {
+		return minusDI;
+	}
+
+	public void setMinusDI(float minusDI) {
+		this.minusDI = minusDI;
+	}
+
+	@Override
+	public String toString() {
+		return "Ticker [symbol=" + getSymbol() + ", series=" + getSeries() + ", open="
+				+ getOpen() + ", high=" + getHigh() + ", low=" + getLow() + ", close=" + getClose()
+				+ ", last=" + getLast() + ", prevclose=" + getPrevclose()
+				+ ", tottrdqty=" + getTottrdqty() + ", tottrdval=" + getTottrdval()
+				+ ", timestamp=" + getTimestamp() + ", totaltrades=" + getTotaltrades()
+				+ ", isin=" + getIsin() + ", sma=" + sma + ", ema12=" + ema12 + ", ema26=" + ema26 + ", fastMacd=" + fastMacd
+				+ ", slowMacd=" + slowMacd + ", histogram=" + histogram + ", trueRange="
+				+ trueRange + ", plusDI=" + plusDI + ", minusDI=" + minusDI + "]";
+	}
+
+	public float getDirMvmtUp() {
+		return dirMvmtUp;
+	}
+
+	public void setDirMvmtUp(float dirMvmtUp) {
+		this.dirMvmtUp = dirMvmtUp;
+	}
+
+	public float getDirMvmtDown() {
+		return dirMvmtDown;
+	}
+
+	public void setDirMvmtDown(float dirMvmtDown) {
+		this.dirMvmtDown = dirMvmtDown;
 	}
 }

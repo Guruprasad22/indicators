@@ -38,4 +38,15 @@ public class MapUtil {
 		log.info("converted map into a list of size : " + myList.size());
 		return myList;
 	}
+	
+	public static Map<String,ArrayList<Indicator>> updateIndicatorMap(String key,Indicator i,Map<String,ArrayList<Indicator>> myMap) {
+		if(myMap.containsKey(key)) {
+			myMap.get(key).add(i);
+		}else {
+			ArrayList<Indicator> tList = new ArrayList<Indicator>();
+			tList.add(i);
+			myMap.put(key,tList);
+		}
+		return myMap;
+	}
 }
