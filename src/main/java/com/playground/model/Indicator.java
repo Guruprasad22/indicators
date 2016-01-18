@@ -17,6 +17,7 @@ public class Indicator extends Ticker {
 	private float slowMacd = 0;
 	private float histogram = 0;
 	
+	//adx related
 	private float dirMvmtUp;
 	private float dirMvmtDown;
 	private float trueRange;
@@ -30,6 +31,12 @@ public class Indicator extends Ticker {
 	private float dx;
 	private float adx;
 	
+	//rsi related
+	private float gain;
+	private float loss;
+	private float avgGain;
+	private float avgLoss;
+	private float rsi;
 
 	public Indicator() {
 		super();
@@ -200,6 +207,55 @@ public class Indicator extends Ticker {
 		this.adx = adx;
 	}
 
+/*	@Override
+	public String toString() {
+		return  ", sma=" + sma + ", ema12=" + ema12 + ", ema26=" + ema26 + ", fastMacd=" + fastMacd
+				+ ", slowMacd=" + slowMacd + ", histogram=" + histogram + ", dirMvmtUp=" + dirMvmtUp + ", dirMvmtDown="
+				+ dirMvmtDown + ", trueRange=" + trueRange + ", plusDI=" + plusDI + ", minusDI=" + minusDI + ", tr14="
+				+ tr14 + ", plusDM14=" + plusDM14 + ", minusDM14=" + minusDM14 + ", plusDI14=" + plusDI14
+				+ ", minusDI14=" + minusDI14 + ", dx=" + dx + ", adx=" + adx + "]";
+	}*/
+
+	public float getGain() {
+		return gain;
+	}
+
+	public void setGain(float gain) {
+		this.gain = gain;
+	}
+
+	public float getLoss() {
+		return loss;
+	}
+
+	public void setLoss(float loss) {
+		this.loss = loss;
+	}
+
+	public float getAvgGain() {
+		return avgGain;
+	}
+
+	public void setAvgGain(float avgGain) {
+		this.avgGain = avgGain;
+	}
+
+	public float getAvgLoss() {
+		return avgLoss;
+	}
+
+	public void setAvgLoss(float avgLoss) {
+		this.avgLoss = avgLoss;
+	}
+
+	public float getRsi() {
+		return rsi;
+	}
+
+	public void setRsi(float rsi) {
+		this.rsi = rsi;
+	}
+
 	@Override
 	public String toString() {
 		return "Ticker [symbol=" + getSymbol() + ", series=" + getSeries() + ", open="
@@ -207,10 +263,11 @@ public class Indicator extends Ticker {
 				+ ", last=" + getLast() + ", prevclose=" + getPrevclose()
 				+ ", tottrdqty=" + getTottrdqty() + ", tottrdval=" + getTottrdval()
 				+ ", timestamp=" + getTimestamp() + ", totaltrades=" + getTotaltrades()
-				+ ", isin=" + getIsin() + ", sma=" + sma + ", ema12=" + ema12 + ", ema26=" + ema26 + ", fastMacd=" + fastMacd
+				+ ", isin=" + getIsin() + " sma=" + sma + ", ema12=" + ema12 + ", ema26=" + ema26 + ", fastMacd=" + fastMacd
 				+ ", slowMacd=" + slowMacd + ", histogram=" + histogram + ", dirMvmtUp=" + dirMvmtUp + ", dirMvmtDown="
 				+ dirMvmtDown + ", trueRange=" + trueRange + ", plusDI=" + plusDI + ", minusDI=" + minusDI + ", tr14="
 				+ tr14 + ", plusDM14=" + plusDM14 + ", minusDM14=" + minusDM14 + ", plusDI14=" + plusDI14
-				+ ", minusDI14=" + minusDI14 + ", dx=" + dx + ", adx=" + adx + "]";
+				+ ", minusDI14=" + minusDI14 + ", dx=" + dx + ", adx=" + adx + ", gain=" + gain + ", loss=" + loss
+				+ ", avgGain=" + avgGain + ", avgLoss=" + avgLoss + ", rsi=" + rsi + "]";
 	}
 }

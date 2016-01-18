@@ -21,6 +21,7 @@ public class Adx {
 	private static Logger log = Logger.getLogger(Adx.class);
 	private Map<String,ArrayList<Indicator>> indicatorMap;
 	private Map<String,ArrayList<Indicator>> tempIndicatorMap;
+	private Map<String,ArrayList<Indicator>> tempIndicatorMap1;
 	private float dirMvmtUp;
 	private float dirMvmtDown;
 	private float trueRange;
@@ -30,7 +31,9 @@ public class Adx {
 	public Map<String,ArrayList<Indicator>> doAdx() {
 		
 		Iterator<Entry<String, ArrayList<Indicator>>> entries = indicatorMap.entrySet().iterator();
+		
 		while(entries.hasNext()) {
+			
 			Map.Entry<String, ArrayList<Indicator>> entry = entries.next();
 			ArrayList<Indicator> indicatorList = entry.getValue();
 			Collections.sort(indicatorList,new MyTickerComparator());
@@ -68,8 +71,34 @@ public class Adx {
 				indicator.setDirMvmtDown(dirMvmtDown);
 				MapUtil.updateIndicatorMap(entry.getKey(),indicator,tempIndicatorMap);
 				
+				
 			}
 		}
+		
+		entries = tempIndicatorMap.entrySet().iterator();
+		
+		while(entries.hasNext()) {
+			
+			Map.Entry<String, ArrayList<Indicator>> entry = entries.next();
+			ArrayList<Indicator> indicatorList = entry.getValue();
+			Collections.sort(indicatorList,new MyTickerComparator());
+			float tr14 = 0;
+			for(int i=0; i<12;i++) {
+				Indicator indicator = indicatorList.get(i);
+				tr14 = tr14 + indicator.getTrueRange();
+				MapUtil.updateIndicatorMap(entry.getKey(),indicator,tempIndicatorMap);
+			}
+			Indicator indicator = indicatorList.get(12);
+			indicator.setTr14((float) tr14/13);
+			MapUtil.updateIndicatorMap(entry.getKey(),indicator,tempIndicatorMap);
+			
+			for(int i=13; i < indicatorList.size(); i++) {
+				
+			}
+		}
+		
+		
+		
 		return tempIndicatorMap;
 	}
 
@@ -133,5 +162,14 @@ public class Adx {
 		super();
 		indicatorMap = new HashMap<String,ArrayList<Indicator>>();
 		tempIndicatorMap = new HashMap<String,ArrayList<Indicator>>();
+		tempIndicatorMap1 = new HashMap<String,ArrayList<Indicator>>();
+	}
+
+	public Map<String, ArrayList<Indicator>> getTempIndicatorMap1() {
+		return tempIndicatorMap1;
+	}
+
+	public void setTempIndicatorMap1(Map<String, ArrayList<Indicator>> tempIndicatorMap1) {
+		this.tempIndicatorMap1 = tempIndicatorMap1;
 	}
 }
