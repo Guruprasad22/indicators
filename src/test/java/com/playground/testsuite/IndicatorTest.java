@@ -82,7 +82,7 @@ public class IndicatorTest {
 		simpleMovingAverage.compileMapOfIndividualStocks();
 		Map<String,ArrayList<Indicator>> myMap = simpleMovingAverage.calculateSma(12);
 //		MapUtil.printMap(myMap);
-		Ema12 ema = new Ema12();
+		/*Ema12 ema = new Ema12();
 		ema.setIndicatorMap(myMap);
 		myMap = ema.doEma();
 		Ema26 ema26 = new Ema26();
@@ -90,7 +90,7 @@ public class IndicatorTest {
 		myMap = ema26.doEma();
 		Macd macd = new Macd();
 		macd.setIndicatorMap(myMap);
-		myMap = macd.doMacd();
+		myMap = macd.doMacd();*/
 		/*Adx adx = new Adx();
 		adx.setIndicatorMap(myMap);
 		myMap = adx.doAdx();*/
@@ -98,7 +98,7 @@ public class IndicatorTest {
 		rsi.setIndicatorMap(myMap);
 		myMap = rsi.doRsi();
 		ArrayList<Indicator> list = MapUtil.compileList(myMap);
-		MapUtil.printMap(myMap);
+//		MapUtil.printMap(myMap);
 		new DatabaseService().commitIndicator(list);
 	}
 }

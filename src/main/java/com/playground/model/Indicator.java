@@ -1,5 +1,7 @@
 package com.playground.model;
 
+import java.math.BigDecimal;
+
 public class Indicator extends Ticker {
 	
 	public float getSma() {
@@ -32,11 +34,11 @@ public class Indicator extends Ticker {
 	private float adx;
 	
 	//rsi related
-	private float gain;
-	private float loss;
-	private float avgGain;
-	private float avgLoss;
-	private float rsi;
+	private BigDecimal gain;
+	private BigDecimal loss;
+	private BigDecimal avgGain;
+	private BigDecimal avgLoss;
+	private BigDecimal rsi;
 
 	public Indicator() {
 		super();
@@ -63,6 +65,11 @@ public class Indicator extends Ticker {
 		minusDI14 = 0;
 		dx = 0;
 		adx = 0;
+		gain = new BigDecimal("0.000");
+		loss = new BigDecimal("0.000");
+		avgGain = new BigDecimal("0.000");
+		avgLoss = new BigDecimal("0.000");
+		rsi = new BigDecimal("0.000");
 	}
 
 	public Indicator(String symbol, String series, float open, float high, float low, float close, float last,
@@ -207,55 +214,6 @@ public class Indicator extends Ticker {
 		this.adx = adx;
 	}
 
-/*	@Override
-	public String toString() {
-		return  ", sma=" + sma + ", ema12=" + ema12 + ", ema26=" + ema26 + ", fastMacd=" + fastMacd
-				+ ", slowMacd=" + slowMacd + ", histogram=" + histogram + ", dirMvmtUp=" + dirMvmtUp + ", dirMvmtDown="
-				+ dirMvmtDown + ", trueRange=" + trueRange + ", plusDI=" + plusDI + ", minusDI=" + minusDI + ", tr14="
-				+ tr14 + ", plusDM14=" + plusDM14 + ", minusDM14=" + minusDM14 + ", plusDI14=" + plusDI14
-				+ ", minusDI14=" + minusDI14 + ", dx=" + dx + ", adx=" + adx + "]";
-	}*/
-
-	public float getGain() {
-		return gain;
-	}
-
-	public void setGain(float gain) {
-		this.gain = gain;
-	}
-
-	public float getLoss() {
-		return loss;
-	}
-
-	public void setLoss(float loss) {
-		this.loss = loss;
-	}
-
-	public float getAvgGain() {
-		return avgGain;
-	}
-
-	public void setAvgGain(float avgGain) {
-		this.avgGain = avgGain;
-	}
-
-	public float getAvgLoss() {
-		return avgLoss;
-	}
-
-	public void setAvgLoss(float avgLoss) {
-		this.avgLoss = avgLoss;
-	}
-
-	public float getRsi() {
-		return rsi;
-	}
-
-	public void setRsi(float rsi) {
-		this.rsi = rsi;
-	}
-
 	@Override
 	public String toString() {
 		return "Ticker [symbol=" + getSymbol() + ", series=" + getSeries() + ", open="
@@ -269,5 +227,45 @@ public class Indicator extends Ticker {
 				+ tr14 + ", plusDM14=" + plusDM14 + ", minusDM14=" + minusDM14 + ", plusDI14=" + plusDI14
 				+ ", minusDI14=" + minusDI14 + ", dx=" + dx + ", adx=" + adx + ", gain=" + gain + ", loss=" + loss
 				+ ", avgGain=" + avgGain + ", avgLoss=" + avgLoss + ", rsi=" + rsi + "]";
+	}
+
+	public BigDecimal getGain() {
+		return gain;
+	}
+
+	public void setGain(BigDecimal gain) {
+		this.gain = gain;
+	}
+
+	public BigDecimal getLoss() {
+		return loss;
+	}
+
+	public void setLoss(BigDecimal loss) {
+		this.loss = loss;
+	}
+
+	public BigDecimal getAvgGain() {
+		return avgGain;
+	}
+
+	public void setAvgGain(BigDecimal avgGain) {
+		this.avgGain = avgGain;
+	}
+
+	public BigDecimal getAvgLoss() {
+		return avgLoss;
+	}
+
+	public void setAvgLoss(BigDecimal avgLoss) {
+		this.avgLoss = avgLoss;
+	}
+
+	public BigDecimal getRsi() {
+		return rsi;
+	}
+
+	public void setRsi(BigDecimal rsi) {
+		this.rsi = rsi;
 	}
 }

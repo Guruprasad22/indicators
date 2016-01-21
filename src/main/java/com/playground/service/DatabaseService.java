@@ -114,6 +114,7 @@ public class DatabaseService {
 		sqlMap.startBatch();
 		
 		for(Ticker ticker: tickers) {
+			log.debug(ticker);
 			sqlMap.insert("insertTicker",ticker);
 		}	
 		
@@ -137,8 +138,7 @@ public class DatabaseService {
 		log.debug("++++commitRecords");
 	}
 	
-	public void commitIndicator(List<Indicator> myList) throws SQLException {
-		try {
+	public void commitIndicator(List<Indicator> myList) throws Exception {
 		log.debug("-----commitIndicator");
 		long startTime  = System.currentTimeMillis();
 		
@@ -150,11 +150,8 @@ public class DatabaseService {
 		sqlMap.executeBatch();
 		sqlMap.commitTransaction();
 		long endTime = System.currentTimeMillis();
-		log.debug("Total time taken to commit indicators : " + (endTime - startTime)/(1000*60) + " minutes.");
+		log.debug("Total time taken to commit indicators : " + (endTime - startTime)/(1000) + " seconds.");
 		log.debug("++++++commitIndicator");
-		}catch(Exception e) {
-			log.debug(e);
-		}
 	}
 	
 	public List<Ticker> getAllTickers() throws SQLException {

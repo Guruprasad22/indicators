@@ -1,5 +1,7 @@
 package com.playground.service;
 
+import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
@@ -28,16 +30,19 @@ public class Rsi {
 		while(entries.hasNext()) {
 			Map.Entry<String, ArrayList<Indicator>> entry = entries.next();
 			ArrayList<Indicator> indicatorList = entry.getValue();
+			Collections.sort(indicatorList,new MyTickerComparator());
 			if(indicatorList.size() >= 14) {
-				Collections.sort(indicatorList,new MyTickerComparator());
 				for(int i=1; i<indicatorList.size(); i++) {
 					Indicator indicator = indicatorList.get(i);
 					if(indicator.getClose() >= indicatorList.get(i-1).getClose()) {
-						indicator.setGain(indicator.getClose() - indicatorList.get(i-1).getClose());
-						indicator.setLoss(0);
+						indicator.setGain(new BigDecimal(indicator.getClose() - indicatorList.get(i-1).getClose()));
+						indicator.setLoss(new BigDecimal(0.000));
 					} else {
-						indicator.setLoss(indicatorList.get(i-1).getClose() - indicator.getClose());
-						indicator.setGain(0);
+						indicator.setLoss(new BigDecimal(indicatorList.get(i-1).getClose() - indicator.getClose()));
+						indicator.setGain(new BigDecimal(0.000));
+					}
+					if(i==1) {
+						MapUtil.updateIndicatorMap(entry.getKey(), indicatorList.get(i-1), indicatorMap1);
 					}
 					MapUtil.updateIndicatorMap(entry.getKey(), indicator, indicatorMap1);
 				}				
@@ -49,53 +54,68 @@ public class Rsi {
 		while(entries.hasNext()) {
 			Map.Entry<String, ArrayList<Indicator>> entry = entries.next();
 			ArrayList<Indicator> indicatorList = entry.getValue();
+			Collections.sort(indicatorList,new MyTickerComparator());
+			BigDecimal netGain = new BigDecimal(0.000);
+			BigDecimal netLoss = new BigDecimal(0.000);
 			if(indicatorList.size() >= 14) {
-				Collections.sort(indicatorList,new MyTickerComparator());
-				float avgGain = 0;
-				float avgLoss = 0;
+				
 				for(int i=0; i<13; i++) {
 					Indicator indicator = indicatorList.get(i);
-					avgGain = avgGain + indicatorList.get(i).getGain();
-					avgLoss = avgLoss + indicatorList.get(i).getLoss();
 					MapUtil.updateIndicatorMap(entry.getKey(), indicator, indicatorMap2);
+					if(i==0) 
+						continue; // no need to calculate the avgGain and Loss for first ticker
+					netGain = netGain.add(indicator.getLoss());
+					netLoss = netLoss.add(indicator.getGain());
+					if(i ==12) {
+						Indicator ind = indicatorList.get(13);
+						ind.setAvgGain(netGain.divide(new BigDecimal(14),3,RoundingMode.HALF_UP));
+						ind.setAvgLoss(netLoss.divide(new BigDecimal(14),3,RoundingMode.HALF_UP));
+						MapUtil.updateIndicatorMap(entry.getKey(), ind, indicatorMap2);
+					}
 				}
-				Indicator indicator = indicatorList.get(13);
-				indicator.setAvgGain((float)avgGain/14);
-				indicator.setAvgLoss((float)avgLoss/14);
-				MapUtil.updateIndicatorMap(entry.getKey(), indicator, indicatorMap2);
+				
+
 				for(int i=14;i< indicatorList.size();i++) {
-					indicator = indicatorList.get(i);
-					avgGain = (float) ((indicatorList.get(i-1).getAvgGain() *13) + indicator.getGain())/14;
-					avgLoss = (float) ((indicatorList.get(i-1).getLoss() * 13) + indicator.getLoss())/14;
-					indicator.setAvgGain(avgGain);
-					indicator.setAvgLoss(avgLoss);
+					if(i ==14) {
+						netGain = netGain.multiply(new BigDecimal(13)).add(indicatorList.get(i).getGain()).divide(new BigDecimal(14),3,RoundingMode.HALF_UP);
+						netLoss = netLoss.multiply(new BigDecimal(13)).add(indicatorList.get(i).getLoss()).divide(new BigDecimal(14),3,RoundingMode.HALF_UP);
+						Indicator indicator = indicatorList.get(i);
+						indicator.setAvgGain(netGain);
+						indicator.setAvgLoss(netLoss);
+						MapUtil.updateIndicatorMap(entry.getKey(), indicator, indicatorMap2);
+						continue;
+					}
+					Indicator indicator = indicatorList.get(i);
+					netGain =  indicatorList.get(i-1).getAvgGain().multiply(new BigDecimal(13)).add(indicator.getGain()).divide(new BigDecimal(14),3,RoundingMode.HALF_UP);
+					netLoss =  indicatorList.get(i-1).getAvgLoss().multiply(new BigDecimal(13)).add(indicator.getLoss()).divide(new BigDecimal(14),3,RoundingMode.HALF_UP);
+					indicator.setAvgGain(netGain);
+					indicator.setAvgLoss(netLoss);
 					MapUtil.updateIndicatorMap(entry.getKey(), indicator, indicatorMap2);
 				}				
 			}
 
 		}
 		indicatorMap1.clear();
-		//finally calculate RS and RSI
+		//finally calculate RSI
 		entries = indicatorMap2.entrySet().iterator();
 		while(entries.hasNext()) {
 			Map.Entry<String, ArrayList<Indicator>> entry = entries.next();
 			ArrayList<Indicator> indicatorList = entry.getValue();
+			Collections.sort(indicatorList,new MyTickerComparator());
 			if(indicatorList.size() >= 14) {
-
-				Collections.sort(indicatorList,new MyTickerComparator());
 				for(int i=0;i<13;i++) {
 					MapUtil.updateIndicatorMap(entry.getKey(),indicatorList.get(i),indicatorMap3);
 				}
-				float rsi = 0;
+				BigDecimal rsi = new BigDecimal("0.000");
 				for(int i=13;i<indicatorList.size();i++) {
 					Indicator indicator = indicatorList.get(i);
-					if(indicator.getAvgLoss() == 0) {
-						indicator.setRsi(0);
+					if(indicator.getAvgLoss().equals(new BigDecimal("0.000"))) {
+						indicator.setRsi(new BigDecimal("100.000"));
 					} else {
-						rsi = 100 - (100/(1+(indicator.getAvgGain()/indicator.getAvgLoss())));
+						rsi = new BigDecimal("100.000").subtract((new BigDecimal("100.000").divide((new BigDecimal("1.000").add(indicator.getAvgGain().divide(indicator.getAvgLoss(),3,RoundingMode.HALF_UP))),3,RoundingMode.HALF_UP)));
 						indicator.setRsi(rsi);
 					}
-					MapUtil.updateIndicatorMap(entry.getKey(),indicatorList.get(i),indicatorMap3);
+					MapUtil.updateIndicatorMap(entry.getKey(),indicator,indicatorMap3);
 				}			
 			}
 
