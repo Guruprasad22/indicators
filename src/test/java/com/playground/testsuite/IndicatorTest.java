@@ -12,11 +12,8 @@ import org.junit.Test;
 import com.playground.model.Indicator;
 import com.playground.model.Ticker;
 import com.playground.service.DatabaseService;
-import com.playground.service.Ema12;
-import com.playground.service.Ema26;
 import com.playground.service.FileReaderService;
-import com.playground.service.Macd;
-import com.playground.service.Rsi;
+import com.playground.service.Obv;
 import com.playground.service.SimpleMovingAverage;
 import com.playground.utility.MapUtil;
 /**
@@ -93,10 +90,13 @@ public class IndicatorTest {
 		myMap = macd.doMacd();*/
 		/*Adx adx = new Adx();
 		adx.setIndicatorMap(myMap);
-		myMap = adx.doAdx();*/
+		myMap = adx.doAdx();
 		Rsi rsi = new Rsi();
 		rsi.setIndicatorMap(myMap);
-		myMap = rsi.doRsi();
+		myMap = rsi.doRsi();*/
+		Obv obv = new Obv();
+		obv.setIndicatorMap(myMap);
+		myMap = obv.doObv();
 		ArrayList<Indicator> list = MapUtil.compileList(myMap);
 //		MapUtil.printMap(myMap);
 		new DatabaseService().commitIndicator(list);

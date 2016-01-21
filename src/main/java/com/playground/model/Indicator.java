@@ -39,6 +39,9 @@ public class Indicator extends Ticker {
 	private BigDecimal avgGain;
 	private BigDecimal avgLoss;
 	private BigDecimal rsi;
+	
+	//on balance volume
+	private long obv;
 
 	public Indicator() {
 		super();
@@ -70,6 +73,7 @@ public class Indicator extends Ticker {
 		avgGain = new BigDecimal("0.000");
 		avgLoss = new BigDecimal("0.000");
 		rsi = new BigDecimal("0.000");
+		obv = 0;
 	}
 
 	public Indicator(String symbol, String series, float open, float high, float low, float close, float last,
@@ -226,7 +230,7 @@ public class Indicator extends Ticker {
 				+ dirMvmtDown + ", trueRange=" + trueRange + ", plusDI=" + plusDI + ", minusDI=" + minusDI + ", tr14="
 				+ tr14 + ", plusDM14=" + plusDM14 + ", minusDM14=" + minusDM14 + ", plusDI14=" + plusDI14
 				+ ", minusDI14=" + minusDI14 + ", dx=" + dx + ", adx=" + adx + ", gain=" + gain + ", loss=" + loss
-				+ ", avgGain=" + avgGain + ", avgLoss=" + avgLoss + ", rsi=" + rsi + "]";
+				+ ", avgGain=" + avgGain + ", avgLoss=" + avgLoss + ", rsi=" + rsi +  ", obv=" + obv +"]";
 	}
 
 	public BigDecimal getGain() {
@@ -267,5 +271,13 @@ public class Indicator extends Ticker {
 
 	public void setRsi(BigDecimal rsi) {
 		this.rsi = rsi;
+	}
+
+	public long getObv() {
+		return obv;
+	}
+
+	public void setObv(long obv) {
+		this.obv = obv;
 	}
 }
