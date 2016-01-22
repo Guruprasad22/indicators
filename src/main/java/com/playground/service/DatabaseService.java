@@ -139,19 +139,24 @@ public class DatabaseService {
 	}
 	
 	public void commitIndicator(List<Indicator> myList) throws Exception {
-		log.debug("-----commitIndicator");
-		long startTime  = System.currentTimeMillis();
-		
-		sqlMap.startTransaction();
-		sqlMap.startBatch();
-		for(Indicator ind: myList) {
-			sqlMap.insert("insertIndicator",ind);
+		try {
+			log.debug("-----commitIndicator");
+			long startTime  = System.currentTimeMillis();
+			
+			sqlMap.startTransaction();
+			sqlMap.startBatch();
+			for(Indicator ind: myList) {
+				sqlMap.insert("insertIndicator",ind);
+			}
+			sqlMap.executeBatch();
+			sqlMap.commitTransaction();
+			long endTime = System.currentTimeMillis();
+			log.debug("Total time taken to commit indicators : " + (endTime - startTime)/(1000) + " seconds.");
+			log.debug("++++++commitIndicator");
+		}catch(Exception e) {
+			log.debug(e);
 		}
-		sqlMap.executeBatch();
-		sqlMap.commitTransaction();
-		long endTime = System.currentTimeMillis();
-		log.debug("Total time taken to commit indicators : " + (endTime - startTime)/(1000) + " seconds.");
-		log.debug("++++++commitIndicator");
+
 	}
 	
 	public List<Ticker> getAllTickers() throws SQLException {

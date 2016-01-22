@@ -56,6 +56,7 @@
 			AVGLOSS DECIMAL(10,3),
 			RSI DECIMAL(10,3),
 			OBV BIGINT,
+			AD DECIMAL(15,1),
 			PRIMARY KEY (SYMBOL,SERIES,TIMESTAMP)
 		)
 	</update>
@@ -140,6 +141,7 @@
 		<parameter property="avgLoss"/>
 		<parameter property="rsi"/>
 		<parameter property="obv"/>
+		<parameter property="ad"/>
 	</parameterMap>
 	
 	<!-- insert into table ticker -->
@@ -150,8 +152,8 @@
 	
 	<!-- insert into table indicator -->
 	<insert id="insertIndicator" parameterMap="indicatorMap">
-		INSERT INTO INDICATOR(SYMBOL,SERIES,OPEN,HIGH,LOW,CLOSE,LAST,PREVCLOSE,TOTTRDQTY,TOTTRDVAL,TIMESTAMP,TOTALTRADES,ISIN,SMA,EMA12,EMA26,FASTMACD,SLOWMACD,HISTOGRAM,TRUERANGE,DIRMVMTUP,DIRMVMTDOWN,GAIN,LOSS,AVGGAIN,AVGLOSS,RSI,OBV)
-		VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?) 
+		INSERT INTO INDICATOR(SYMBOL,SERIES,OPEN,HIGH,LOW,CLOSE,LAST,PREVCLOSE,TOTTRDQTY,TOTTRDVAL,TIMESTAMP,TOTALTRADES,ISIN,SMA,EMA12,EMA26,FASTMACD,SLOWMACD,HISTOGRAM,TRUERANGE,DIRMVMTUP,DIRMVMTDOWN,GAIN,LOSS,AVGGAIN,AVGLOSS,RSI,OBV,AD)
+		VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?) 
 	</insert>
 	
 </sqlMap>
