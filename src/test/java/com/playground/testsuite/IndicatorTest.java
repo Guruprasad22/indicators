@@ -14,6 +14,7 @@ import com.playground.model.Ticker;
 import com.playground.service.Ad;
 import com.playground.service.DatabaseService;
 import com.playground.service.FileReaderService;
+import com.playground.service.ForceIndex;
 import com.playground.service.SimpleMovingAverage;
 import com.playground.utility.MapUtil;
 /**
@@ -96,12 +97,15 @@ public class IndicatorTest {
 		myMap = rsi.doRsi();
 		Obv obv = new Obv();
 		obv.setIndicatorMap(myMap);
-		myMap = obv.doObv();*/
+		myMap = obv.doObv();
 		Ad ad = new Ad();
 		ad.setIndicatorMap(myMap);
-		myMap = ad.doAccumulationDistribution();
+		myMap = ad.doAccumulationDistribution();*/
+		ForceIndex forceIndex = new ForceIndex();
+		forceIndex.setIndicatorMap(myMap);
+		myMap = forceIndex.doForceIndex();
 		ArrayList<Indicator> list = MapUtil.compileList(myMap);
-//		MapUtil.printMap(myMap);
+		MapUtil.printMap(myMap);
 		new DatabaseService().commitIndicator(list);
 	}
 }

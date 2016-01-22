@@ -45,6 +45,10 @@ public class Indicator extends Ticker {
 	
 	//accumulation distribution
 	private BigDecimal ad;
+	
+	//force index
+	private BigDecimal fi;
+	private BigDecimal fi13;
 
 	public Indicator() {
 		super();
@@ -78,6 +82,8 @@ public class Indicator extends Ticker {
 		rsi = new BigDecimal("0.000");
 		obv = 0;
 		ad = new BigDecimal("0.0");
+		fi = new BigDecimal("0.0");
+		fi13 = new BigDecimal("0.0");
 	}
 
 	public Indicator(String symbol, String series, float open, float high, float low, float close, float last,
@@ -234,7 +240,7 @@ public class Indicator extends Ticker {
 				+ dirMvmtDown + ", trueRange=" + trueRange + ", plusDI=" + plusDI + ", minusDI=" + minusDI + ", tr14="
 				+ tr14 + ", plusDM14=" + plusDM14 + ", minusDM14=" + minusDM14 + ", plusDI14=" + plusDI14
 				+ ", minusDI14=" + minusDI14 + ", dx=" + dx + ", adx=" + adx + ", gain=" + gain + ", loss=" + loss
-				+ ", avgGain=" + avgGain + ", avgLoss=" + avgLoss + ", rsi=" + rsi +  ", obv=" + obv + ", ad=" + ad +"]";
+				+ ", avgGain=" + avgGain + ", avgLoss=" + avgLoss + ", rsi=" + rsi +  ", obv=" + obv + ", ad=" + ad + ", fi=" + fi +  ", fi13=" + fi13 +"]";
 	}
 
 	public BigDecimal getGain() {
@@ -291,5 +297,21 @@ public class Indicator extends Ticker {
 
 	public void setAd(BigDecimal ad) {
 		this.ad = ad;
+	}
+
+	public BigDecimal getFi() {
+		return fi;
+	}
+
+	public void setFi(BigDecimal fi) {
+		this.fi = fi;
+	}
+
+	public BigDecimal getFi13() {
+		return fi13;
+	}
+
+	public void setFi13(BigDecimal fi13) {
+		this.fi13 = fi13;
 	}
 }
