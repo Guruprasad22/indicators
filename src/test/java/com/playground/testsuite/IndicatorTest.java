@@ -6,12 +6,13 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.Properties;
 
 import org.junit.Test;
 
+import com.playground.model.Derivative;
 import com.playground.model.Indicator;
 import com.playground.model.Ticker;
-import com.playground.service.Ad;
 import com.playground.service.DatabaseService;
 import com.playground.service.FileReaderService;
 import com.playground.service.ForceIndex;
@@ -74,7 +75,7 @@ public class IndicatorTest {
 		databaseService.getAllTickers();
 	}
 	
-	@Test
+//	@Test
 	public void calculateIndicators() throws Exception {
 		SimpleMovingAverage simpleMovingAverage = new SimpleMovingAverage();
 		simpleMovingAverage.compileMapOfIndividualStocks();
@@ -107,5 +108,17 @@ public class IndicatorTest {
 		ArrayList<Indicator> list = MapUtil.compileList(myMap);
 		MapUtil.printMap(myMap);
 		new DatabaseService().commitIndicator(list);
+	}
+	
+	@Test
+	public void readAndCommitOpenInterest() throws Exception {
+		FileReaderService fileReaderService = new FileReaderService();
+		Properties properties = new Properties();
+		properties.load(IndicatorTest.class.getClassLoader().getResourceAsStream("config.properties"));
+		fileReaderService.setDirectoryName(properties.getProperty("openInterestDir"));
+		List<File> files = fileReaderService.loadDataFiles();
+		List<Derivative> myList = fileReaderService.readOIFiles(files);
+		System.out.println("list size is " + myList.size());
+		new DatabaseService().commitDerivatives(myList);
 	}
 }

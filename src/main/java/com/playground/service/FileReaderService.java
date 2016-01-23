@@ -8,8 +8,10 @@ import java.util.List;
 
 import org.apache.log4j.Logger;
 
+import com.playground.model.Derivative;
 import com.playground.model.Ticker;
-import com.playground.utility.StringToPojo;
+import com.playground.utility.OpenIntToPojo;
+import com.playground.utility.TickerToPojo;
 
 /**
  * 
@@ -21,12 +23,14 @@ public class FileReaderService {
 	private String directoryName;
 	private List<File> fileNames ;
 	private List<Ticker> tickers;
+	List<Derivative> derivatives;
 	private static Logger log = Logger.getLogger(FileReaderService.class);
 	
 	public FileReaderService() {
 		directoryName = "";
 		fileNames = new ArrayList<File>();
 		tickers = new ArrayList<Ticker>();
+		derivatives = new ArrayList<Derivative>();
 	}
 	
 	/*
@@ -70,7 +74,7 @@ public class FileReaderService {
 					firstLine = false;
 					continue;
 				}else {
-					Ticker ticker = new StringToPojo().convertToPojo(line);
+					Ticker ticker = new TickerToPojo().convertToPojo(line);
 					tickers.add(ticker);
 				}
 			} // end of while loop
@@ -79,6 +83,33 @@ public class FileReaderService {
 		return tickers;
 	}
 
+	public List<Derivative> readOIFiles(List<File> files) throws Exception {
+		log.debug("---- read Open Interest files----");
+		if(files.size() == 0) {
+			throw new Exception("No new files to read from!!");
+		}
+		try {
+		for(File file: files) {
+			boolean firstLine = true;
+			BufferedReader reader = new BufferedReader(new FileReader(file));
+			String line = "";
+			while((line = reader.readLine()) != null) {
+				if(firstLine == true) {
+					firstLine = false;
+					continue;
+				}else {
+					Derivative derivative = new OpenIntToPojo().doConvert(line);
+					derivatives.add(derivative);
+				}
+			} // end of while loop
+		} // end of for loop
+		log.debug("++++ read Open Interest files++++");
+		}catch(Exception e) {
+			log.debug(e);
+		}
+		return derivatives;
+	}
+	
 	public String getDirectoryName() {
 		return directoryName;
 	}

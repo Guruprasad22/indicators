@@ -2,7 +2,7 @@ package com.playground.utility;
 
 import com.playground.model.Ticker;
 
-public class StringToPojo {
+public class TickerToPojo {
 	
 	private Ticker ticker;
 	
@@ -25,12 +25,12 @@ public class StringToPojo {
 		return ticker;
 	}
 
-	public StringToPojo(Ticker ticker) {
+	public TickerToPojo(Ticker ticker) {
 		super();
 		this.ticker = ticker;
 	}
 
-	public StringToPojo() {
+	public TickerToPojo() {
 		super();
 		ticker =  new Ticker();
 		// TODO Auto-generated constructor stub

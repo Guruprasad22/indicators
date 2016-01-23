@@ -71,6 +71,18 @@
 			);
 	</update>
 	
+	<update id="createTable_Derivative">
+		CREATE TABLE MARKET.DERIVATIVE(
+			DATE VARCHAR(15) NOT NULL,
+			ISIN VARCHAR(20) NOT NULL,
+			SCRIP_NAME VARCHAR(40) NOT NULL,
+			NSE_SYMBOL VARCHAR(40) NOT NULL,
+			MWPL INT NOT NULL,
+			OPEN_INTEREST BIGINT NOT NULL,
+			PRIMARY KEY(DATE,ISIN)
+		);
+	</update>
+	
 	<!-- check if the table exists -->
 	<select id="findTable" resultClass="String" parameterClass="String">
 		SELECT information_schema.TABLES.TABLE_NAME FROM
@@ -148,6 +160,15 @@
 		<parameter property="fi13"/>
 	</parameterMap>
 	
+	<parameterMap class="com.playground.model.Derivative" id="derivativeMap">
+		<parameter property="date"/>
+		<parameter property="isin"/>
+		<parameter property="scrip_name"/>
+		<parameter property="nse_symbol"/>
+		<parameter property="mwpl"/>
+		<parameter property="open_interest"/>
+	</parameterMap>
+	
 	<!-- insert into table ticker -->
 	<insert id="insertTicker" parameterMap="tickrMap">
 		INSERT INTO TICKER(SYMBOL,SERIES,OPEN,HIGH,LOW,CLOSE,LAST,PREVCLOSE,TOTTRDQTY,TOTTRDVAL,TIMESTAMP,TOTALTRADES,ISIN)
@@ -158,6 +179,12 @@
 	<insert id="insertIndicator" parameterMap="indicatorMap">
 		INSERT INTO INDICATOR(SYMBOL,SERIES,OPEN,HIGH,LOW,CLOSE,LAST,PREVCLOSE,TOTTRDQTY,TOTTRDVAL,TIMESTAMP,TOTALTRADES,ISIN,SMA,EMA12,EMA26,FASTMACD,SLOWMACD,HISTOGRAM,TRUERANGE,DIRMVMTUP,DIRMVMTDOWN,GAIN,LOSS,AVGGAIN,AVGLOSS,RSI,OBV,AD,FI,FI13)
 		VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?) 
+	</insert>
+	
+	<!-- insert into table DERIVATIVE -->
+	<insert id="insertDerivative" parameterMap="derivativeMap">
+		INSERT INTO DERIVATIVE(DATE,ISIN,SCRIP_NAME,NSE_SYMBOL,MWPL,OPEN_INTEREST)
+		VALUES(?,?,?,?,?,?)
 	</insert>
 	
 </sqlMap>

@@ -13,6 +13,7 @@ import org.apache.log4j.Logger;
 import com.ibatis.common.resources.Resources;
 import com.ibatis.sqlmap.client.SqlMapClient;
 import com.ibatis.sqlmap.client.SqlMapClientBuilder;
+import com.playground.model.Derivative;
 import com.playground.model.Indicator;
 import com.playground.model.Ticker;
 
@@ -64,10 +65,6 @@ public class DatabaseService {
 		Properties properties = new Properties();
 		properties.load(DatabaseService.class.getClassLoader().getResourceAsStream("config.properties"));
 		log.debug("Input directory is set to : " + properties.getProperty("inputDir"));
-		/*try (final InputStream stream =
-		           this.getClass().getResourceAsStream("foo.properties")) {
-			properties.load(stream);
-		}*/
 		 // read all the ticker files already inserted into database
 		 List<String> tickerFiles =  (List<String>) sqlMap.queryForList("getFilenames");
 		 
@@ -159,10 +156,28 @@ public class DatabaseService {
 
 	}
 	
+	public void commitDerivatives(List<Derivative> myList) throws Exception {
+		try {
+			log.debug("-----commitDerivatives-----");
+			long startTime  = System.currentTimeMillis();
+			sqlMap.startTransaction();
+			sqlMap.startBatch();
+			for(Derivative der: myList) {
+				sqlMap.insert("insertDerivative",der);
+			}
+			sqlMap.executeBatch();
+			sqlMap.commitTransaction();
+			long endTime = System.currentTimeMillis();
+			log.debug("Total time taken to commit derivatives : " + (endTime - startTime)/(1000) + " seconds.");
+			log.debug("++++++commitDerivatives+++++");
+		}catch(Exception e) {
+			log.debug(e);
+		}
+	}
+	
 	public List<Ticker> getAllTickers() throws SQLException {
 		// read all the tickers from database
 		List<Ticker> tickerList =  (List<Ticker>) sqlMap.queryForList("getTickers");
-				 
 		if(tickerList.isEmpty()) {
 			log.info("There are no tickers committed to database");
 		}else{
