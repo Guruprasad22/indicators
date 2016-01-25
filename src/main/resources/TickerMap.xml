@@ -63,13 +63,22 @@
 		)
 	</update>
 	
-	<!-- create ticker filename table -->
+	<!-- create ticker filename table 
 	<update id="createTable_File">
 		CREATE TABLE FILE (
 			NAME VARCHAR(30) NOT NULL,
 			PRIMARY KEY(NAME)
 			);
+	</update>-->
+	
+	<update id="createTable_File">
+		CREATE TABLE FILE (
+			NAME VARCHAR(30) NOT NULL,
+			TICKER VARCHAR(5) NOT NULL,
+			PRIMARY KEY(NAME,TICKER)
+			);
 	</update>
+	
 	
 	<update id="createTable_Derivative">
 		CREATE TABLE MARKET.DERIVATIVE(
@@ -90,9 +99,9 @@
 		WHERE information_schema.TABLES.TABLE_NAME =#VALUE#
 	</select>
 	
-	<!-- return all ticker files -->
-	<select id="getFilenames" resultClass="String">
-		SELECT NAME FROM FILE
+	<!-- return all files -->
+	<select id="getFilenames" resultClass="String" parameterClass="String">
+		SELECT NAME FROM FILE WHERE TICKER=#VALUE#
 	</select>
 	
 	<!-- return all tickers -->
@@ -101,13 +110,14 @@
 	</select>
 
 	
-	<parameterMap class="String" id="stringArg">
-		<parameter property="name" jdbcType="varchar"/>
+	<parameterMap class="com.playground.model.FileMap" id="fileMap">
+		<parameter property="name"/>
+		<parameter property="ticker"/>
 	</parameterMap>
 	
 	<!-- Insert into table file  -->
-	<insert id="insertFile" parameterMap="stringArg">
-		INSERT INTO FILE(NAME) VALUES(?)
+	<insert id="insertFile" parameterMap="fileMap">
+		INSERT INTO FILE(NAME,TICKER) VALUES(?,?)
 	</insert>
 	
 	<parameterMap class="com.playground.model.Ticker" id="tickrMap">

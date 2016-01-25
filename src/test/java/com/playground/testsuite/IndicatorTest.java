@@ -60,7 +60,7 @@ public class IndicatorTest {
 	public void doDataValidation() throws Exception {
 		
 		DatabaseService dbService = new DatabaseService();
-		dbService.doValidation();
+		dbService.doValidation("Y");
 	}
 	
 //	@Test
@@ -117,8 +117,10 @@ public class IndicatorTest {
 		properties.load(IndicatorTest.class.getClassLoader().getResourceAsStream("config.properties"));
 		fileReaderService.setDirectoryName(properties.getProperty("openInterestDir"));
 		List<File> files = fileReaderService.loadDataFiles();
+		files = new DatabaseService().doValidation("N");
 		List<Derivative> myList = fileReaderService.readOIFiles(files);
 		System.out.println("list size is " + myList.size());
 		new DatabaseService().commitDerivatives(myList);
+		new DatabaseService().commitFileNames(files, "N");
 	}
 }

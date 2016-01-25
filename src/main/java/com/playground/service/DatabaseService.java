@@ -14,6 +14,7 @@ import com.ibatis.common.resources.Resources;
 import com.ibatis.sqlmap.client.SqlMapClient;
 import com.ibatis.sqlmap.client.SqlMapClientBuilder;
 import com.playground.model.Derivative;
+import com.playground.model.FileMap;
 import com.playground.model.Indicator;
 import com.playground.model.Ticker;
 
@@ -59,14 +60,14 @@ public class DatabaseService {
 	/*
 	 * check if files are already committed to database
 	 */
-	public List<File> doValidation() throws Exception {
+	public List<File> doValidation(String choice) throws Exception {
 		log.debug("++++doValidation");
 		//load the directory path from properties file
 		Properties properties = new Properties();
 		properties.load(DatabaseService.class.getClassLoader().getResourceAsStream("config.properties"));
 		log.debug("Input directory is set to : " + properties.getProperty("inputDir"));
 		 // read all the ticker files already inserted into database
-		 List<String> tickerFiles =  (List<String>) sqlMap.queryForList("getFilenames");
+		 List<String> tickerFiles =  (List<String>) sqlMap.queryForList("getFilenames",new String(choice));
 		 
 		 if(tickerFiles.isEmpty()) {
 			 log.info("There are no files committed to database");
@@ -80,7 +81,11 @@ public class DatabaseService {
 		 
 		 List<File> filteredFiles = new ArrayList<File>();
 		 FileReaderService fileReaderService = new FileReaderService();
-		 fileReaderService.setDirectoryName(properties.getProperty("inputDir"));
+		 if(choice.equalsIgnoreCase("N")) {
+			 fileReaderService.setDirectoryName(properties.getProperty("openInterestDir"));
+		 } else {
+			 fileReaderService.setDirectoryName(properties.getProperty("inputDir"));
+		 }
 		 List<File> inputFiles = fileReaderService.loadDataFiles();
 		 for(File f : inputFiles) {
 			 if(!tickerFiles.contains(f.getName())) {
@@ -101,7 +106,7 @@ public class DatabaseService {
 	public void commitRecords() throws Exception {
 		log.debug("++++commitRecords");
 		FileReaderService reader =  new FileReaderService();		
-    	List<File> files = doValidation();
+    	List<File> files = doValidation("Y");
     	List<Ticker> tickers = reader.readDataFiles(files); //inserting only the delta files from source directory
     	log.debug("ticker size is " + tickers.size());
 	
@@ -111,24 +116,28 @@ public class DatabaseService {
 		sqlMap.startBatch();
 		
 		for(Ticker ticker: tickers) {
-			log.debug(ticker);
+//			log.debug(ticker);
 			sqlMap.insert("insertTicker",ticker);
 		}	
 		
 		sqlMap.executeBatch();
 		sqlMap.commitTransaction();
 		
-		//insert the filenames into table files
+		commitFileNames(files,"Y");
+/*		//insert the filenames into table files
 		sqlMap.startTransaction();
 		sqlMap.startBatch();
 		 
 		for(File f: files) {
 		 log.info("Inserting file " + f.getName() + " into database ");
-		 sqlMap.insert("insertFile",new String(f.getName()));
+		 FileMap fileMap = new FileMap();
+		 fileMap.setName(f.getName());
+		 fileMap.setTicker("Y");
+		 sqlMap.insert("insertFile",fileMap);
 		}
 		 
 		sqlMap.executeBatch();
-		sqlMap.commitTransaction();
+		sqlMap.commitTransaction();*/
 		 
 		long endTime  = System.currentTimeMillis();
 		log.info("Total time taken = " + (endTime- startTime)/1000 + " seconds");
@@ -173,6 +182,29 @@ public class DatabaseService {
 		}catch(Exception e) {
 			log.debug(e);
 		}
+	}
+	
+	public void commitFileNames(List<File> files,String choice) {
+		try {
+			//insert the filenames into table files
+			sqlMap.startTransaction();
+			sqlMap.startBatch();
+			 
+			for(File f: files) {
+			 log.debug("Inserting file " + f.getName() + " into database ");
+			 FileMap fileMap = new FileMap();
+			 fileMap.setName(f.getName());
+			 fileMap.setTicker(choice);
+			 sqlMap.insert("insertFile",fileMap);
+			}
+			 
+			sqlMap.executeBatch();
+			sqlMap.commitTransaction();
+			
+		}catch(Exception e) {
+			log.debug(e);
+		}
+		
 	}
 	
 	public List<Ticker> getAllTickers() throws SQLException {
