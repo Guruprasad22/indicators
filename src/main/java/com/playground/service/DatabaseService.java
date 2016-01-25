@@ -37,24 +37,42 @@ public class DatabaseService {
 	
 	public void createDatabaseTables() throws SQLException{
 		 //create ticker table if it does not exist
-		 String tableExists = (String) sqlMap.queryForObject("findTable","ticker");
+		 String tableExists = (String) sqlMap.queryForObject("findTable",new String("ticker"));
 
 		 if(tableExists == null) {
 			 log.info("table " + " TICKER" + " does not exist");
 			 sqlMap.update("createTable");
 		 } else {
-			 log.info("table " + " TICKER" + " exists");
+			 log.info("table " + " TICKER " + " exists");
 		 }
 		 
 		 // create file table if it does not exist
-		 tableExists = (String) sqlMap.queryForObject("findTable","file");	 
+		 tableExists = (String) sqlMap.queryForObject("findTable",new String("file"));	 
 
 		 if(tableExists == null) {
 			 log.info("table " + " FILE" + " does not exist");
 			 sqlMap.update("createTable_File");
 		 } else {
-			 log.info("table " + " FILE" + "exists ");
+			 log.info("table " + " FILE " + "exists ");
 		 }
+		 
+		 //create derivative table if it does not exist
+		 tableExists = (String) sqlMap.queryForObject("findTable",new String("derivative"));
+		 if(tableExists == null) {
+			 log.info("table " + " derivative" + " does not exist");
+			 sqlMap.update("createTable_Derivative");
+		 } else {
+			 log.info("table " + " derivative " + "exists ");
+		 }
+		 
+		 //create table indiactor if it deos not exist
+		 tableExists = (String) sqlMap.queryForObject("findTable",new String("indicator"));
+		 if(tableExists == null) {
+			 log.info("table " + "  indicator" + " does not exist");
+			 sqlMap.update("createIndicator");
+		 } else {
+			 log.info("table " + " indicator " + "exists ");
+		 }		 
 	}
 	
 	/*

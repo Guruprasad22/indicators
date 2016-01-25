@@ -11,12 +11,27 @@ select * from market.ticker;
 
 select symbol,series,close,timestamp,sma from market.indicator order by symbol,series,str_to_date(timestamp,'%d-%M-%Y') asc;
 
+--delete commands
+
+drop table market.derivative;
+drop table market.file;
 delete from market.ticker where symbol != "20MICRONS"
+
+-- truncate commands
 
 truncate table market.indicator;
 truncate table market.ticker;
 truncate table market.file;
+truncate table market.derivative;
 
-select symbol,series,count(*) from market.indicator group by symbol,series;
+
+
+
+
+
+
+
+
+
 
 

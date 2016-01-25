@@ -49,7 +49,7 @@ public class IndicatorTest {
     	}
 	}
 	
-//	@Test
+	@Test
 	public void doDBTest() throws IOException, SQLException {
 		DatabaseService dbService = new DatabaseService();
 		dbService.setUp();
@@ -110,7 +110,7 @@ public class IndicatorTest {
 		new DatabaseService().commitIndicator(list);
 	}
 	
-	@Test
+//	@Test
 	public void readAndCommitOpenInterest() throws Exception {
 		FileReaderService fileReaderService = new FileReaderService();
 		Properties properties = new Properties();
