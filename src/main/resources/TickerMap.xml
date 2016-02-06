@@ -18,7 +18,7 @@
 			PREVCLOSE FLOAT NOT NULL,
 			TOTTRDQTY BIGINT,
 			TOTTRDVAL DOUBLE,
-			TIMESTAMP VARCHAR(20) NOT NULL,
+			TIMESTAMP DATE NOT NULL,
 			TOTALTRADES VARCHAR(10),
 			ISIN VARCHAR(20) NOT NULL,
 			PRIMARY KEY (SYMBOL,SERIES,TIMESTAMP)
@@ -38,7 +38,7 @@
 			PREVCLOSE FLOAT NOT NULL,
 			TOTTRDQTY BIGINT,
 			TOTTRDVAL DOUBLE,
-			TIMESTAMP VARCHAR(20) NOT NULL,
+			TIMESTAMP DATE NOT NULL,
 			TOTALTRADES VARCHAR(10),
 			ISIN VARCHAR(20) NOT NULL,
 			SMA FLOAT NOT NULL,
@@ -82,7 +82,7 @@
 	
 	<update id="createTable_Derivative">
 		CREATE TABLE DERIVATIVE(
-			DATE VARCHAR(15) NOT NULL,
+			DATE DATE NOT NULL,
 			ISIN VARCHAR(20) NOT NULL,
 			SCRIP_NAME VARCHAR(40) NOT NULL,
 			NSE_SYMBOL VARCHAR(40) NOT NULL,
@@ -182,19 +182,19 @@
 	<!-- insert into table ticker -->
 	<insert id="insertTicker" parameterMap="tickrMap">
 		INSERT INTO TICKER(SYMBOL,SERIES,OPEN,HIGH,LOW,CLOSE,LAST,PREVCLOSE,TOTTRDQTY,TOTTRDVAL,TIMESTAMP,TOTALTRADES,ISIN)
-		VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?) 
+		VALUES(?,?,?,?,?,?,?,?,?,?,STR_TO_DATE(?,'%d-%M-%Y'),?,?) 
 	</insert>
 	
 	<!-- insert into table indicator -->
 	<insert id="insertIndicator" parameterMap="indicatorMap">
 		INSERT INTO INDICATOR(SYMBOL,SERIES,OPEN,HIGH,LOW,CLOSE,LAST,PREVCLOSE,TOTTRDQTY,TOTTRDVAL,TIMESTAMP,TOTALTRADES,ISIN,SMA,EMA12,EMA26,FASTMACD,SLOWMACD,HISTOGRAM,TRUERANGE,DIRMVMTUP,DIRMVMTDOWN,GAIN,LOSS,AVGGAIN,AVGLOSS,RSI,OBV,AD,FI,FI13)
-		VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?) 
+		VALUES(?,?,?,?,?,?,?,?,?,?,STR_TO_DATE(?,'%d-%M-%Y'),?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?) 
 	</insert>
 	
 	<!-- insert into table DERIVATIVE -->
 	<insert id="insertDerivative" parameterMap="derivativeMap">
 		INSERT INTO DERIVATIVE(DATE,ISIN,SCRIP_NAME,NSE_SYMBOL,MWPL,OPEN_INTEREST)
-		VALUES(?,?,?,?,?,?)
+		VALUES(STR_TO_DATE(?,'%d-%M-%Y'),?,?,?,?,?)
 	</insert>
 	
 </sqlMap>

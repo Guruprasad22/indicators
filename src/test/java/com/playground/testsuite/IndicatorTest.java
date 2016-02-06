@@ -49,7 +49,7 @@ public class IndicatorTest {
     	}
 	}
 	
-	@Test
+//	@Test
 	public void doDBTest() throws IOException, SQLException {
 		DatabaseService dbService = new DatabaseService();
 		dbService.setUp();
@@ -75,7 +75,7 @@ public class IndicatorTest {
 		databaseService.getAllTickers();
 	}
 	
-//	@Test
+	@Test
 	public void calculateIndicators() throws Exception {
 		SimpleMovingAverage simpleMovingAverage = new SimpleMovingAverage();
 		simpleMovingAverage.compileMapOfIndividualStocks();
