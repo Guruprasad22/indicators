@@ -1,6 +1,8 @@
 package com.playground.service;
 
 import java.io.IOException;
+import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.sql.SQLException;
 import java.text.ParseException;
 import java.util.ArrayList;
@@ -60,7 +62,7 @@ public class SimpleMovingAverage {
 			log.debug("Key is " + entry.getKey());
 			ArrayList<Ticker> tickerList = entry.getValue();
 			Collections.sort(tickerList,new MyTickerComparator()); // sorts records in ascending order of dates
-			ArrayList<Float> sma = new ArrayList<Float>();
+			ArrayList<BigDecimal> closingPrice = new ArrayList<BigDecimal>();
 			
 			//set the indicators before interval as having 0 sma
 			int iterations = 0; 
@@ -74,7 +76,8 @@ public class SimpleMovingAverage {
 			for(int i=0;i<iterations; i++) {
 //				log.debug("i is : " + i + " iterations is " + iterations);
 				Indicator indicator = new Indicator(tickerList.get(i));
-				indicator.setSma(0);
+				indicator.setSma(new BigDecimal("0.000"));
+//				log.info(indicator);
 				updateIndicatorMap(indicator.getSymbol()+ "+" + indicator.getSeries(),indicator);
 			}
 			
@@ -82,25 +85,26 @@ public class SimpleMovingAverage {
 			
 			for(int i = interval-1; i< tickerList.size(); i++) {
 				Indicator indicator = new Indicator(tickerList.get(i));
-				for(int j=count++; j<i;j++) {
-						sma.add(tickerList.get(j).getClose());
+				for(int j=count++; j<=i;j++) {
+					closingPrice.add(new BigDecimal(tickerList.get(j).getClose()));
 				}
-				if(sma.isEmpty()) {
+				if(closingPrice.isEmpty()) {
 					log.debug("sma list is empty how come??");
 //					indicator.setSma(0);
 				} else {
-					float ma = 0;
-					for(int k=0; k<sma.size(); k++) {
-						ma = ma + sma.get(k);
+					BigDecimal ma = new BigDecimal("0.000");
+					for(int k=0; k<closingPrice.size(); k++) {
+						ma = ma.add(closingPrice.get(k));
 					}
-					if(sma.size() < interval-1) {
-						indicator.setSma(0);
+					if(closingPrice.size() < interval-1) {
+						indicator.setSma(new BigDecimal("0.000"));
 					} else {
-						indicator.setSma(ma/sma.size());
+						BigDecimal divider = new BigDecimal(closingPrice.size());
+						indicator.setSma(ma.divide(divider,3,RoundingMode.HALF_UP));
 					}
 				}
 				updateIndicatorMap(indicator.getSymbol()+ "+" + indicator.getSeries(),indicator);
-				sma.clear();
+				closingPrice.clear();
 			}
 
  		} // end for each ticker

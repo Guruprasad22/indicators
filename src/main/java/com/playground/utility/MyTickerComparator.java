@@ -11,7 +11,7 @@ import com.playground.model.Ticker;
 public class MyTickerComparator implements Comparator<Ticker> {
 
 	public int compare(Ticker o1, Ticker o2){
-		SimpleDateFormat simpleDateFormat = new SimpleDateFormat("dd-MMM-yyyy");
+		SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd");
 		Date date = new Date();
 		Date date1 = new Date();
 		try {
@@ -29,7 +29,7 @@ public class MyTickerComparator implements Comparator<Ticker> {
 	}
 	
 	public int compare(Indicator o1, Indicator o2){
-		SimpleDateFormat simpleDateFormat = new SimpleDateFormat("dd-MMM-yyyy");
+		SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-mm-dd");
 		Date date = new Date();
 		Date date1 = new Date();
 		try {

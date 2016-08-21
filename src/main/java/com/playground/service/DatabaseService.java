@@ -180,7 +180,6 @@ public class DatabaseService {
 		}catch(Exception e) {
 			log.debug(e);
 		}
-
 	}
 	
 	public void commitDerivatives(List<Derivative> myList) throws Exception {

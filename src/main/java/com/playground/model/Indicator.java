@@ -4,15 +4,15 @@ import java.math.BigDecimal;
 
 public class Indicator extends Ticker {
 	
-	public float getSma() {
+	public BigDecimal getSma() {
 		return sma;
 	}
 
-	public void setSma(float sma) {
+	public void setSma(BigDecimal sma) {
 		this.sma = sma;
 	}
 
-	private float sma = 0;
+	private BigDecimal sma;
 	private float ema12 = 0;
 	private float ema26 = 0;
 	private float fastMacd = 0;
@@ -57,7 +57,7 @@ public class Indicator extends Ticker {
 	
 	public Indicator(Ticker t) {
 		super(t.getSymbol(),t.getSeries(),t.getOpen(),t.getHigh(),t.getLow(),t.getClose(),t.getLast(),t.getPrevclose(),t.getTottrdqty(),(long) t.getTottrdval(),t.getTimestamp(),t.getTotaltrades(),t.getIsin());
-		sma = 0;
+		sma = new BigDecimal("0.000");
 		ema12 = 0;
 		ema26 = 0;
 		fastMacd = 0;
