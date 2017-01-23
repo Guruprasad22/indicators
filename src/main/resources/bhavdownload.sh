@@ -18,7 +18,7 @@ dateRangeFunction()
 	do 
 		echo "$startDate"
 		stringGen $startDate
-		curl --user-agent "Mozilla/4.0" "$url$dateString$suffix" > $outPutFile
+		curl --user-agent "Mozilla/4.0" "$url$yr/$mnt/cm$dateString$suffix" > $outPutFile
 		if [ $? -eq 0 ]; then
 			unzip ./$outPutFile
 			rm -f ./$outPutFile
@@ -27,7 +27,7 @@ dateRangeFunction()
 	done
 }
 
-export url=https://nse-india.com/content/historical/EQUITIES/$yr/$mnt/cm
+export url=https://nse-india.com/content/historical/EQUITIES/
 export suffix=bhav.csv.zip
 export outPutFile=myfile.zip
 dateRangeFunction $1 $2
