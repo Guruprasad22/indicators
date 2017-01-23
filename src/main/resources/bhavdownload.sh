@@ -1,0 +1,35 @@
+#!/bin/bash
+#######################################################################################################################
+################# Download the bhavcopy for a duration ################################################################
+################# Usage : $0 <startDate> <endDate> ####################################################################
+
+stringGen()
+{
+	export dateString=$(date -d $1 +%d%b%Y | tr 'a-z' 'A-Z')
+	export yr=$(date -d $1 +%Y)
+	export mnt=$(date -d $1 +%b | tr 'a-z' 'A-Z')
+}
+
+dateRangeFunction()
+{
+	startDate=$1
+	endDate=$2
+	while [[ $startDate < $endDate ]] 
+	do 
+		echo "$startDate"
+		stringGen $startDate
+		curl --user-agent "Mozilla/4.0" "$url$dateString$suffix" > $outPutFile
+		if [ $? -eq 0 ]; then
+			unzip ./$outPutFile
+			rm -f ./$outPutFile
+		fi
+		startDate=$(date -d "$startDate + 1 days" +%Y%m%d)
+	done
+}
+
+export url=https://nse-india.com/content/historical/EQUITIES/$yr/$mnt/cm
+export suffix=bhav.csv.zip
+export outPutFile=myfile.zip
+dateRangeFunction $1 $2
+exit 0
+
