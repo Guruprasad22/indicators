@@ -1,7 +1,7 @@
 #!/bin/bash
 #######################################################################################################################
 ################# Download the bhavcopy for a duration ################################################################
-################# Usage : $0 <startDate> <endDate> ####################################################################
+################# Usage : $0 <startDate> <endDate> <target>############################################################
 
 stringGen()
 {
@@ -31,5 +31,6 @@ export url=https://nse-india.com/content/historical/EQUITIES/
 export suffix=bhav.csv.zip
 export outPutFile=myfile.zip
 dateRangeFunction $1 $2
+cp $PWD/*.csv $3
 exit 0
 

@@ -122,49 +122,42 @@ public class DatabaseService {
 	 * @throws Exception
 	 */
 	public void commitRecords() throws Exception {
-		log.debug("++++commitRecords");
-		FileReaderService reader =  new FileReaderService();		
-    	List<File> files = doValidation("Y");
-    	List<Ticker> tickers = reader.readDataFiles(files); //inserting only the delta files from source directory
-    	log.debug("ticker size is " + tickers.size());
-	
-		long startTime  = System.currentTimeMillis();
-		//insert tickers into table ticker
-		sqlMap.startTransaction();
-		sqlMap.startBatch();
-		
-		for(Ticker ticker: tickers) {
+		try {
+			
+			log.info("----commitRecords");
+			FileReaderService reader =  new FileReaderService();		
+			List<File> files = doValidation("Y");
+			List<Ticker> tickers = new ArrayList<Ticker>();
+			if( files.size() > 0 ) {
+				 tickers = reader.readDataFiles(files); //inserting only the delta files from source directory
+			}
+			
+			long startTime  = System.currentTimeMillis();
+			//insert tickers into table ticker
+			sqlMap.startTransaction();
+			sqlMap.startBatch();
+			
+			for(Ticker ticker: tickers) {
 //			log.debug(ticker);
-			sqlMap.insert("insertTicker",ticker);
-		}	
-		
-		sqlMap.executeBatch();
-		sqlMap.commitTransaction();
-		
-		commitFileNames(files,"Y");
-/*		//insert the filenames into table files
-		sqlMap.startTransaction();
-		sqlMap.startBatch();
-		 
-		for(File f: files) {
-		 log.info("Inserting file " + f.getName() + " into database ");
-		 FileMap fileMap = new FileMap();
-		 fileMap.setName(f.getName());
-		 fileMap.setTicker("Y");
-		 sqlMap.insert("insertFile",fileMap);
+				sqlMap.insert("insertTicker",ticker);
+			}	
+			
+			sqlMap.executeBatch();
+			sqlMap.commitTransaction();
+			
+			commitFileNames(files,"Y");
+			
+			long endTime  = System.currentTimeMillis();
+			log.info("Total time taken for commitRecords = " + (endTime- startTime)/1000 + " seconds");
+			log.debug("++++commitRecords");
+		}catch(Exception e) {
+			log.debug(e);
 		}
-		 
-		sqlMap.executeBatch();
-		sqlMap.commitTransaction();*/
-		 
-		long endTime  = System.currentTimeMillis();
-		log.info("Total time taken = " + (endTime- startTime)/1000 + " seconds");
-		log.debug("++++commitRecords");
 	}
 	
 	public void commitIndicator(List<Indicator> myList) throws Exception {
 		try {
-			log.debug("-----commitIndicator");
+			log.info("-----commitIndicator");
 			long startTime  = System.currentTimeMillis();
 			
 			sqlMap.startTransaction();
@@ -175,8 +168,8 @@ public class DatabaseService {
 			sqlMap.executeBatch();
 			sqlMap.commitTransaction();
 			long endTime = System.currentTimeMillis();
-			log.debug("Total time taken to commit indicators : " + (endTime - startTime)/(1000) + " seconds.");
-			log.debug("++++++commitIndicator");
+			log.info("Total time taken to commit indicators : " + (endTime - startTime)/(1000) + " seconds.");
+			log.info("++++++commitIndicator");
 		}catch(Exception e) {
 			log.debug(e);
 		}
@@ -184,7 +177,7 @@ public class DatabaseService {
 	
 	public void commitDerivatives(List<Derivative> myList) throws Exception {
 		try {
-			log.debug("-----commitDerivatives-----");
+			log.info("-----commitDerivatives-----");
 			long startTime  = System.currentTimeMillis();
 			sqlMap.startTransaction();
 			sqlMap.startBatch();
@@ -195,7 +188,7 @@ public class DatabaseService {
 			sqlMap.commitTransaction();
 			long endTime = System.currentTimeMillis();
 			log.debug("Total time taken to commit derivatives : " + (endTime - startTime)/(1000) + " seconds.");
-			log.debug("++++++commitDerivatives+++++");
+			log.info("++++++commitDerivatives+++++");
 		}catch(Exception e) {
 			log.debug(e);
 		}
@@ -204,11 +197,12 @@ public class DatabaseService {
 	public void commitFileNames(List<File> files,String choice) {
 		try {
 			//insert the filenames into table files
+			log.info("----commitFileNames");
 			sqlMap.startTransaction();
 			sqlMap.startBatch();
 			 
 			for(File f: files) {
-			 log.debug("Inserting file " + f.getName() + " into database ");
+			 log.info("Inserting file " + f.getName() + " into database ");
 			 FileMap fileMap = new FileMap();
 			 fileMap.setName(f.getName());
 			 fileMap.setTicker(choice);
@@ -217,7 +211,7 @@ public class DatabaseService {
 			 
 			sqlMap.executeBatch();
 			sqlMap.commitTransaction();
-			
+			log.info("++++commitFileNames");
 		}catch(Exception e) {
 			log.debug(e);
 		}
