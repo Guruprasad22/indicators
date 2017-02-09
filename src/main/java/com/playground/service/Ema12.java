@@ -1,5 +1,7 @@
-/*package com.playground.service;
+package com.playground.service;
 
+import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
@@ -10,7 +12,6 @@ import java.util.Map.Entry;
 import org.apache.log4j.Logger;
 
 import com.playground.model.Indicator;
-import com.playground.model.Ticker;
 import com.playground.utility.MyTickerComparator;
 
 public class Ema12 {
@@ -36,19 +37,20 @@ public class Ema12 {
 			if(indicatorList.size() >= 12) {
 				for(int i=0; i < 12; i++) {
 					Indicator indicator = indicatorList.get(i);
-					indicator.setEma12(0);
+					indicator.setEma12(new BigDecimal("0.000"));
 					updateIndicatorMap(indicator.getSymbol()+ "+" + indicator.getSeries(),indicator);
 				}
 				
 				// calculate the 12 day ema
 				float k = (float) 2/13;
-				float ema12;
+				BigDecimal ema12;
 				for(int i = 12; i < indicatorList.size(); i++) {
 					Indicator indicator = indicatorList.get(i);
 					if( i == 12)
-						ema12 = (indicator.getSma() * (1-k)) + ( indicator.getClose() * k);
+						ema12 = indicator.getSma().multiply(new BigDecimal(1-k)).add( new BigDecimal(indicator.getClose()).multiply(new BigDecimal(k))); 
 					else
-						ema12 = (indicatorList.get(i-1).getEma12() * (1-k)) + ( indicator.getClose() * k);
+						ema12 = (indicatorList.get(i-1).getEma12().multiply(new BigDecimal(1-k))).add( new BigDecimal(indicator.getClose()).multiply(new BigDecimal(k)));
+					ema12 = ema12.setScale(3, RoundingMode.HALF_UP);
 					indicator.setEma12(ema12);
 					updateIndicatorMap(indicator.getSymbol()+ "+" + indicator.getSeries(),indicator);
 				}				
@@ -98,5 +100,3 @@ public class Ema12 {
 		}
 	}
 }
-
-*/

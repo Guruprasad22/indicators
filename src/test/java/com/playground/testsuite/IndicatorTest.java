@@ -14,6 +14,8 @@ import com.playground.model.Derivative;
 import com.playground.model.Indicator;
 import com.playground.model.Ticker;
 import com.playground.service.DatabaseService;
+import com.playground.service.Ema12;
+import com.playground.service.Ema26;
 import com.playground.service.FileReaderService;
 import com.playground.service.SimpleMovingAverage;
 import com.playground.utility.MapUtil;
@@ -44,7 +46,7 @@ public class IndicatorTest {
     	List<File> files = reader.loadDataFiles();
     	List<Ticker> tickers = reader.readDataFiles(files);
     	for(Ticker t : tickers) {
-    		System.out.println(t);
+//    		System.out.println(t);
     	}
 	}
 	
@@ -62,9 +64,9 @@ public class IndicatorTest {
 		dbService.doValidation("Y");
 	}
 	
-	@Test
+//	@Test
 	public void commitRecords() throws Exception {
-		
+		//this method looks for any new files that get added under bhav folder and commits them to ticker table
 		DatabaseService databaseService =  new DatabaseService();
 		databaseService.commitRecords();		
 	}
@@ -74,19 +76,31 @@ public class IndicatorTest {
 		databaseService.getAllTickers();
 	}
 	
+//	@Test
+	public void truncateIndicators() throws Exception {
+		DatabaseService databaseService =  new DatabaseService();
+		databaseService.truncateIndicator();
+	}
+	
 	@Test
 	public void calculateIndicators() throws Exception {
+		//first truncate the indicator table and then start with the calculations
+		DatabaseService databaseService =  new DatabaseService();
+		databaseService.truncateIndicator();
+		// compile the list of all tickers
 		SimpleMovingAverage simpleMovingAverage = new SimpleMovingAverage();
 		simpleMovingAverage.compileMapOfIndividualStocks();
+		// sort and calculate the 12 day sma
 		Map<String,ArrayList<Indicator>> myMap = simpleMovingAverage.calculateSma(12);
+		
 //		MapUtil.printMap(myMap);
-		/*Ema12 ema = new Ema12();
+		Ema12 ema = new Ema12();
 		ema.setIndicatorMap(myMap);
 		myMap = ema.doEma();
 		Ema26 ema26 = new Ema26();
 		ema26.setIndicatorMap(myMap);
 		myMap = ema26.doEma();
-		Macd macd = new Macd();
+		/*Macd macd = new Macd();
 		macd.setIndicatorMap(myMap);
 		myMap = macd.doMacd();
 		Adx adx = new Adx();

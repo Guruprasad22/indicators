@@ -1,5 +1,7 @@
-/*package com.playground.service;
+package com.playground.service;
 
+import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
@@ -35,7 +37,7 @@ public class Ema26 {
 					//set the first 25 emas to ZERO for ema26
 					for(int i=0; i < 25; i++) {
 						Indicator indicator = indicatorList.get(i);
-						indicator.setEma26(0);
+						indicator.setEma26(new BigDecimal("0.000"));
 						updateIndicatorMap(indicator.getSymbol()+ "+" + indicator.getSeries(),indicator);
 					}
 
@@ -43,11 +45,12 @@ public class Ema26 {
 					for(int i = 25; i < indicatorList.size(); i++) {
 						Indicator indicator = indicatorList.get(i);
 						float k = (float) 2/27;
-						float ema26 = 0;
+						BigDecimal ema26 = new BigDecimal("0.000");
 						if( i == 25)
-							ema26 = (indicator.getClose() * k) + (indicator.getSma() * (1-k));
+							ema26 = (new BigDecimal(indicator.getClose()).multiply(new BigDecimal(k))).add(indicator.getSma().multiply(new BigDecimal(1-k)));
 						else 
-							ema26 = (indicator.getClose() * k) + (indicatorList.get(i-1).getEma26() *(1-k));
+							ema26 = (new BigDecimal(indicator.getClose()).multiply(new BigDecimal(k))).add(indicatorList.get(i-1).getEma26().multiply(new BigDecimal(1-k)));
+						ema26 = ema26.setScale(3, RoundingMode.HALF_UP);
 						indicator.setEma26(ema26);
 						updateIndicatorMap(indicator.getSymbol()+ "+" + indicator.getSeries(),indicator);
 					}				
@@ -95,4 +98,4 @@ public class Ema26 {
 				finalIndicatorMap.put(key,tList);
 			}
 		}
-}*/
+}

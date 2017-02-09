@@ -63,14 +63,6 @@
 		)
 	</update>
 	
-	<!-- create ticker filename table 
-	<update id="createTable_File">
-		CREATE TABLE FILE (
-			NAME VARCHAR(30) NOT NULL,
-			PRIMARY KEY(NAME)
-			);
-	</update>-->
-	
 	<update id="createTable_File">
 		CREATE TABLE FILE (
 			NAME VARCHAR(30) NOT NULL,
@@ -109,6 +101,10 @@
 		SELECT * FROM TICKER
 	</select>
 
+	<!-- return all tickers for equity type -->
+	<select id="getEquityTickers" resultClass="com.playground.model.Ticker">
+		SELECT * FROM TICKER WHERE SERIES = 'EQ'
+	</select>
 	
 	<parameterMap class="com.playground.model.FileMap" id="fileMap">
 		<parameter property="name"/>
@@ -196,5 +192,9 @@
 		INSERT INTO DERIVATIVE(DATE,ISIN,SCRIP_NAME,NSE_SYMBOL,MWPL,OPEN_INTEREST)
 		VALUES(STR_TO_DATE(?,'%d-%M-%Y'),?,?,?,?,?)
 	</insert>
+	
+	<delete id="deleteIndicators">
+		TRUNCATE TABLE INDICATOR
+	</delete>
 	
 </sqlMap>

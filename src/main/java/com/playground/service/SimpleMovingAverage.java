@@ -29,7 +29,7 @@ public class SimpleMovingAverage {
 	// break the entire list into group of stock+series and populate to a map
 	public void compileMapOfIndividualStocks() throws SQLException, IOException {
 		log.info("-----------compileMapOfIndividualStocks-------------");
-		List<Ticker> tickerList = new DatabaseService().getAllTickers();
+		List<Ticker> tickerList = new DatabaseService().getAllEquityTickers();
 		
 		ArrayList<Ticker> stockList = new ArrayList<Ticker>();
 		for(Ticker ticker : tickerList) {

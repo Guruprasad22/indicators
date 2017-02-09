@@ -13,8 +13,8 @@ public class Indicator extends Ticker {
 	}
 
 	private BigDecimal sma;
-	private float ema12 = 0;
-	private float ema26 = 0;
+	private BigDecimal ema12;
+	private BigDecimal ema26;
 	private float fastMacd = 0;
 	private float slowMacd = 0;
 	private float histogram = 0;
@@ -58,8 +58,8 @@ public class Indicator extends Ticker {
 	public Indicator(Ticker t) {
 		super(t.getSymbol(),t.getSeries(),t.getOpen(),t.getHigh(),t.getLow(),t.getClose(),t.getLast(),t.getPrevclose(),t.getTottrdqty(),(long) t.getTottrdval(),t.getTimestamp(),t.getTotaltrades(),t.getIsin());
 		sma = new BigDecimal("0.000");
-		ema12 = 0;
-		ema26 = 0;
+		ema12 = new BigDecimal("0.000");
+		ema26 = new BigDecimal("0.000");
 		fastMacd = 0;
 		slowMacd = 0;
 		histogram =0;
@@ -92,19 +92,19 @@ public class Indicator extends Ticker {
 		// TODO Auto-generated constructor stub
 	}
 
-	public float getEma12() {
+	public BigDecimal getEma12() {
 		return ema12;
 	}
 
-	public void setEma12(float ema12) {
+	public void setEma12(BigDecimal ema12) {
 		this.ema12 = ema12;
 	}
 
-	public float getEma26() {
+	public BigDecimal getEma26() {
 		return ema26;
 	}
 
-	public void setEma26(float ema26) {
+	public void setEma26(BigDecimal ema26) {
 		this.ema26 = ema26;
 	}
 
