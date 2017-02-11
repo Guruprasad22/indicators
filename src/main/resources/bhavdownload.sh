@@ -2,6 +2,7 @@
 #######################################################################################################################
 ################# Download the bhavcopy for a duration ################################################################
 ################# Usage : $0 <startDate> <endDate> <target>############################################################
+################## example : $0 20160101 20161231 /some/folder ########################################################
 
 stringGen()
 {
@@ -14,7 +15,7 @@ dateRangeFunction()
 {
 	startDate=$1
 	endDate=$2
-	while [[ $startDate < $endDate ]] 
+	while [[ $startDate -le $endDate ]] 
 	do 
 		echo "$startDate"
 		stringGen $startDate

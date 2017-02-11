@@ -168,8 +168,26 @@ public class DatabaseService {
 			sqlMap.executeBatch();
 			sqlMap.commitTransaction();
 			long endTime = System.currentTimeMillis();
-			log.info("Total time taken to commit indicators : " + (endTime - startTime)/(1000) + " seconds.");
-			log.info("++++++commitIndicator");
+			log.info("Total time taken to commit indicators : " + (endTime - startTime)/(1000*60) + " minutes.");
+			log.info("+++++commitIndicator");
+		}catch(Exception e) {
+			log.debug(e);
+		}
+	}
+	
+	public void truncateIndicator() throws Exception {
+		try {
+			log.info("-----truncateIndicator");
+			long startTime  = System.currentTimeMillis();
+			
+			sqlMap.startTransaction();
+			sqlMap.startBatch();
+			sqlMap.delete("deleteIndicators");
+			sqlMap.executeBatch();
+			sqlMap.commitTransaction();
+			long endTime = System.currentTimeMillis();
+			log.info("Total time taken to commit indicators : " + (endTime - startTime)/(1000*60) + " minutes");
+			log.info("+++++truncateIndicator");
 		}catch(Exception e) {
 			log.debug(e);
 		}
@@ -229,6 +247,22 @@ public class DatabaseService {
 //						 log.debug(ticker);
 					 }
 				 }
+		return tickerList;
+	}
+	
+	public List<Ticker> getAllEquityTickers() throws SQLException {
+		// read all the tickers from database
+		log.info("----getAllEquityTickers");
+		List<Ticker> tickerList =  (List<Ticker>) sqlMap.queryForList("getEquityTickers");
+		if(tickerList.isEmpty()) {
+			log.info("There are no tickers committed to database");
+		}else{
+//			log.debug("The files committed to database are ");
+//					 for(Ticker ticker : tickerList) {
+//						 log.debug(ticker);
+//					 }
+				 }
+		log.info("++++getAllEquityTickers");
 		return tickerList;
 	}
 }

@@ -15,9 +15,9 @@ public class Indicator extends Ticker {
 	private BigDecimal sma;
 	private BigDecimal ema12;
 	private BigDecimal ema26;
-	private float fastMacd = 0;
-	private float slowMacd = 0;
-	private float histogram = 0;
+	private BigDecimal fastMacd;
+	private BigDecimal slowMacd;
+	private BigDecimal histogram;
 	
 	//adx related
 	private float dirMvmtUp;
@@ -60,9 +60,9 @@ public class Indicator extends Ticker {
 		sma = new BigDecimal("0.000");
 		ema12 = new BigDecimal("0.000");
 		ema26 = new BigDecimal("0.000");
-		fastMacd = 0;
-		slowMacd = 0;
-		histogram =0;
+		fastMacd = new BigDecimal("0.000");
+		slowMacd = new BigDecimal("0.000");
+		histogram =new BigDecimal("0.000");
 		dirMvmtUp = 0;
 		dirMvmtDown = 0;
 		trueRange = 0;
@@ -108,27 +108,27 @@ public class Indicator extends Ticker {
 		this.ema26 = ema26;
 	}
 
-	public float getFastMacd() {
+	public BigDecimal getFastMacd() {
 		return fastMacd;
 	}
 
-	public void setFastMacd(float fastMacd) {
+	public void setFastMacd(BigDecimal fastMacd) {
 		this.fastMacd = fastMacd;
 	}
 
-	public float getSlowMacd() {
+	public BigDecimal getSlowMacd() {
 		return slowMacd;
 	}
 
-	public void setSlowMacd(float slowMacd) {
+	public void setSlowMacd(BigDecimal slowMacd) {
 		this.slowMacd = slowMacd;
 	}
 
-	public float getHistogram() {
+	public BigDecimal getHistogram() {
 		return histogram;
 	}
 
-	public void setHistogram(float histogram) {
+	public void setHistogram(BigDecimal histogram) {
 		this.histogram = histogram;
 	}
 

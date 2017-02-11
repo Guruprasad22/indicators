@@ -1,5 +1,6 @@
 package com.playground.service;
 
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
@@ -36,14 +37,14 @@ public class Macd {
 			//set the first 25 to ZERO
 			for(int i =0; i<25; i++) {
 				Indicator indicator = indicatorList.get(i);
-				indicator.setFastMacd(0);
+				indicator.setFastMacd(new BigDecimal("0.000"));
 				updateIndicatorMap(entry.getKey(),indicator,fastMacdIndicatorMap);
 			}
 			
 			if(indicatorList.size() >= 26) {
 				for(int i =25; i < indicatorList.size(); i++) {
 					Indicator indicator = indicatorList.get(i);
-					float fastMacd = indicator.getEma12() - indicator.getEma26();
+					BigDecimal fastMacd = indicator.getEma12().subtract(indicator.getEma26());
 					indicator.setFastMacd(fastMacd);
 					updateIndicatorMap(entry.getKey(),indicator,fastMacdIndicatorMap);
 				}
@@ -63,18 +64,18 @@ public class Macd {
 				//set the first 35 to ZERO
 				for(int i =0; i<35; i++) {
 					Indicator indicator = indicatorList.get(i);
-					indicator.setSlowMacd(0);
+					indicator.setSlowMacd(new BigDecimal("0.000"));
 					updateIndicatorMap(entry.getKey(),indicator,slowMacdIndicatorMap);
 				}
 				
 				float k = (float) 2/10;
-				float slowEma;
+				BigDecimal slowEma;
 				for(int i=35; i<indicatorList.size(); i++) {
 					Indicator indicator = indicatorList.get(i);
 					if( i == 35)
 						slowEma = indicator.getFastMacd();
 					else
-						slowEma = (indicatorList.get(i-1).getFastMacd() * (1-k)) + ( indicator.getFastMacd() * k);
+						slowEma = (indicatorList.get(i-1).getFastMacd().multiply(new BigDecimal(1-k))).add(indicator.getFastMacd().multiply(new BigDecimal(k)));
 					indicator.setSlowMacd(slowEma);
 					updateIndicatorMap(entry.getKey(),indicator,slowMacdIndicatorMap);
 				}
@@ -96,7 +97,7 @@ public class Macd {
 				}
 				for(int i=35; i<indicatorList.size(); i++) {
 					Indicator indicator = indicatorList.get(i);
-					indicator.setHistogram(indicator.getFastMacd() - indicator.getSlowMacd());
+					indicator.setHistogram((indicator.getFastMacd().subtract(indicator.getSlowMacd())).multiply(new BigDecimal("100")));
 					updateIndicatorMap(entry.getKey(),indicator,histogramIndicatorMap);
 				}
 			} else {
@@ -167,4 +168,3 @@ public class Macd {
 		this.histogramIndicatorMap = histogramIndicatorMap;
 	}
 }
-		
