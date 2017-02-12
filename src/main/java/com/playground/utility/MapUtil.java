@@ -28,7 +28,7 @@ public class MapUtil {
 	}
 	
 	public static ArrayList<Indicator> compileList(Map<String, ArrayList<Indicator>> myMap) {
-		
+		log.info("------------compileList--------------");
 		Iterator<Entry<String,ArrayList<Indicator>>> iterator = myMap.entrySet().iterator();
 		ArrayList<Indicator> myList = new ArrayList<Indicator>();
 		while(iterator.hasNext()) {
@@ -36,6 +36,7 @@ public class MapUtil {
 			myList.addAll(entry.getValue());
 		}
 		log.info("converted map into a list of size : " + myList.size());
+		log.info("++++++++++++compileList++++++++++++++");
 		return myList;
 	}
 	

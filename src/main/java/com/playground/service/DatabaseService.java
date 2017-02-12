@@ -6,6 +6,7 @@ import java.io.Reader;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
+import com.google.common.collect.Lists;
 import java.util.Properties;
 
 import org.apache.log4j.Logger;
@@ -186,7 +187,7 @@ public class DatabaseService {
 			sqlMap.executeBatch();
 			sqlMap.commitTransaction();
 			long endTime = System.currentTimeMillis();
-			log.info("Total time taken to commit indicators : " + (endTime - startTime)/(1000*60) + " minutes");
+			log.info("Total time taken to truncate indicators : " + (endTime - startTime)/(1000*60) + " minutes");
 			log.info("+++++truncateIndicator");
 		}catch(Exception e) {
 			log.debug(e);
@@ -265,4 +266,35 @@ public class DatabaseService {
 		log.info("++++getAllEquityTickers");
 		return tickerList;
 	}
+	
+	/**
+	 * getting gc exception may be because of size of list 
+	 * trying to break it down to make it more efficient
+	 * @param myList
+	 * @throws Exception
+	 */
+	public void commitIndicator1(List<Indicator> myList) throws Exception {
+		try {
+			log.info("----- commitIndicator 1 -----");
+			long startTime  = System.currentTimeMillis();
+			List<List<Indicator>> smallerLists = Lists.partition(myList, 2);
+			log.info("list size is : " + smallerLists.size());
+			for(int i=0; i<smallerLists.size(); i++) {
+				sqlMap.startTransaction();
+				sqlMap.startBatch();
+				for(Indicator ind: smallerLists.get(i)) {
+					sqlMap.insert("insertIndicator",ind);
+				}
+				sqlMap.executeBatch();
+				sqlMap.commitTransaction();
+				log.info("intermediate commit completed ..");
+			}
+			long endTime = System.currentTimeMillis();
+			log.info("Total time taken to commit indicators 1 : " + (endTime - startTime)/(1000*60) + " minutes.");
+			log.info("+++++ commitIndicator 1 +++++");
+		}catch(Exception e) {
+			log.debug(e);
+		}
+	}
+	
 }

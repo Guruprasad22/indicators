@@ -21,10 +21,10 @@ public class ForceIndex {
 	private Map<String,ArrayList<Indicator>> indicatorMap1;
 	private Map<String,ArrayList<Indicator>> indicatorMap2;
 	
-	public Map<String,ArrayList<Indicator>> doForceIndex() {
+	public Map<String,ArrayList<Indicator>> getForceIndex() {
 		
-		log.debug("----doForceIndex----");
-		//calculate the force index for each ticker
+		log.info("----getForceIndex----");
+		// calculate the force index for each ticker
 		Iterator<Entry<String, ArrayList<Indicator>>> entries = indicatorMap.entrySet().iterator();
 		while(entries.hasNext()) { // for each ticker
 			Map.Entry<String, ArrayList<Indicator>> entry = entries.next();
@@ -41,7 +41,10 @@ public class ForceIndex {
 				MapUtil.updateIndicatorMap(entry.getKey(),indicator,indicatorMap1);
 			}
 		}
-		//calculate the 13 day ema of force index
+		
+		log.info("Done calculating force index");
+		indicatorMap.clear();
+		// calculate the 13 day ema of force index
 		entries = indicatorMap1.entrySet().iterator();
 		
 		while(entries.hasNext()) { // for each ticker
@@ -53,13 +56,13 @@ public class ForceIndex {
 			if(indicatorList.size() >= 12) {
 				for(int i=0; i < 12; i++) {
 					Indicator indicator = indicatorList.get(i);
-					indicator.setFi13(new BigDecimal(0.0).setScale(1, BigDecimal.ROUND_HALF_UP));
+					indicator.setFi13(new BigDecimal("0.0").setScale(1, BigDecimal.ROUND_HALF_UP));
 					MapUtil.updateIndicatorMap(entry.getKey(),indicator,indicatorMap2);
 				}
 				
 				// calculate the 13 day ema
 				float k = (float) 2/14;
-				BigDecimal fi13 = new BigDecimal(0.0).setScale(1, BigDecimal.ROUND_HALF_UP);
+				BigDecimal fi13 = new BigDecimal("0.0").setScale(1, BigDecimal.ROUND_HALF_UP);
 				for(int i = 12; i < indicatorList.size(); i++) {
 					Indicator indicator = indicatorList.get(i);
 					if( i == 12)
@@ -71,8 +74,9 @@ public class ForceIndex {
 				}				
 			}
 		}// end for each ticker
-		log.debug("++++doForceIndex++++");
-		return indicatorMap1;
+		log.info("++++getForceIndex++++");
+		indicatorMap1.clear();
+		return indicatorMap2;
 	}
 
 	public Map<String, ArrayList<Indicator>> getIndicatorMap() {

@@ -13,10 +13,16 @@ import org.junit.Test;
 import com.playground.model.Derivative;
 import com.playground.model.Indicator;
 import com.playground.model.Ticker;
+import com.playground.service.Ad;
+import com.playground.service.Adx;
 import com.playground.service.DatabaseService;
 import com.playground.service.Ema12;
 import com.playground.service.Ema26;
 import com.playground.service.FileReaderService;
+import com.playground.service.ForceIndex;
+import com.playground.service.Macd;
+import com.playground.service.Obv;
+import com.playground.service.Rsi;
 import com.playground.service.SimpleMovingAverage;
 import com.playground.utility.MapUtil;
 /**
@@ -64,7 +70,7 @@ public class IndicatorTest {
 		dbService.doValidation("Y");
 	}
 	
-//	@Test
+	@Test
 	public void commitRecords() throws Exception {
 		//this method looks for any new files that get added under bhav folder and commits them to ticker table
 		DatabaseService databaseService =  new DatabaseService();
@@ -92,7 +98,6 @@ public class IndicatorTest {
 		simpleMovingAverage.compileMapOfIndividualStocks();
 		// sort and calculate the 12 day sma
 		Map<String,ArrayList<Indicator>> myMap = simpleMovingAverage.calculateSma(12);
-		
 //		MapUtil.printMap(myMap);
 		Ema12 ema = new Ema12();
 		ema.setIndicatorMap(myMap);
@@ -100,9 +105,12 @@ public class IndicatorTest {
 		Ema26 ema26 = new Ema26();
 		ema26.setIndicatorMap(myMap);
 		myMap = ema26.doEma();
-		/*Macd macd = new Macd();
+		Macd macd = new Macd();
 		macd.setIndicatorMap(myMap);
 		myMap = macd.doMacd();
+		/*ForceIndex forceIndex = new ForceIndex();
+		forceIndex.setIndicatorMap(myMap);
+		myMap = forceIndex.getForceIndex();
 		Adx adx = new Adx();
 		adx.setIndicatorMap(myMap);
 		myMap = adx.doAdx();
@@ -114,10 +122,7 @@ public class IndicatorTest {
 		myMap = obv.doObv();
 		Ad ad = new Ad();
 		ad.setIndicatorMap(myMap);
-		myMap = ad.doAccumulationDistribution();
-		ForceIndex forceIndex = new ForceIndex();
-		forceIndex.setIndicatorMap(myMap);
-		myMap = forceIndex.doForceIndex();*/
+		myMap = ad.doAccumulationDistribution();*/
 		ArrayList<Indicator> list = MapUtil.compileList(myMap);
 //		MapUtil.printMap(myMap);
 		new DatabaseService().commitIndicator(list);
