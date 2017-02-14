@@ -108,10 +108,10 @@ public class IndicatorTest {
 		Macd macd = new Macd();
 		macd.setIndicatorMap(myMap);
 		myMap = macd.doMacd();
-		/*ForceIndex forceIndex = new ForceIndex();
+		ForceIndex forceIndex = new ForceIndex();
 		forceIndex.setIndicatorMap(myMap);
 		myMap = forceIndex.getForceIndex();
-		Adx adx = new Adx();
+		/*Adx adx = new Adx();
 		adx.setIndicatorMap(myMap);
 		myMap = adx.doAdx();
 		Rsi rsi = new Rsi();
@@ -125,7 +125,7 @@ public class IndicatorTest {
 		myMap = ad.doAccumulationDistribution();*/
 		ArrayList<Indicator> list = MapUtil.compileList(myMap);
 //		MapUtil.printMap(myMap);
-		new DatabaseService().commitIndicator(list);
+		new DatabaseService().commitIndicator1(list);
 	}
 	
 //	@Test

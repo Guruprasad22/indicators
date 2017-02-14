@@ -277,7 +277,7 @@ public class DatabaseService {
 		try {
 			log.info("----- commitIndicator 1 -----");
 			long startTime  = System.currentTimeMillis();
-			List<List<Indicator>> smallerLists = Lists.partition(myList, 2);
+			List<List<Indicator>> smallerLists = Lists.partition(myList, 2000);
 			log.info("list size is : " + smallerLists.size());
 			for(int i=0; i<smallerLists.size(); i++) {
 				sqlMap.startTransaction();
