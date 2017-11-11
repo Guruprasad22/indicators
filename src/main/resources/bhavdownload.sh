@@ -17,7 +17,7 @@ dateRangeFunction()
       endDate=$2
       while [[ $startDate -le $endDate ]]
       do
-        echo "$startDate"
+        echo "date chosen : $startDate"
         stringGen $startDate
         curl  -o cm$dateString$suffix "$url$yr/$mnt/cm$dateString$suffix"
         if [ $? -eq 0 ]; then
@@ -41,7 +41,14 @@ export suffix=bhav.csv.zip
 export outPutFile=myfile.zip
 dateRangeFunction $1 $2
 mv $PWD/*.csv $3
-tail -q -n +2 $3/cm*.csv > $3/output.csv
+if [ -f $3/output.csv ]; then
+	tail -q -n +2 $3/cm*.csv >> $3/output.csv
+else
+	echo "symbol,series,open,high,low,close,last,prevclose,tottrdqty,tottrdval,timestamp,totaltrades,isin,dummy" > $3/output.csv
+	tail -q -n +2 $3/cm*.csv >> $3/output.csv
+fi
+
 rm $3/cm*.csv
+
 exit 0
 
